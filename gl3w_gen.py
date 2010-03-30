@@ -60,7 +60,7 @@ int gl3wInit(void);
 with open('src/gl3w.c', 'wb') as f:
     f.write(r'''#include <GL3/gl3w.h>
 
-#if defined(_WIN32)
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 
@@ -85,7 +85,6 @@ static void *get_proc(const char *proc)
 	return res;
 }
 #else
-
 #include <dlfcn.h>
 #include <GL/glx.h>
 
