@@ -123,12 +123,12 @@ static int isdig(char ch)
 
 static int parse_version(void)
 {
+	const char *p;
 	int major, minor;
-	const char *ver, *p;
 
-	if (!glGetString || !(ver = glGetString(GL_VERSION)))
+	if (!glGetString || !(p = glGetString(GL_VERSION)))
 		return -1;
-	for (major = 0, p = ver; isdig(*p); p++)
+	for (major = 0; isdig(*p); p++)
 		major = 10 * major + *p - '0';
 	for (minor = 0, p++; isdig(*p); p++)
 		minor = 10 * minor + *p - '0';
