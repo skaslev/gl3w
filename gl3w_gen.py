@@ -42,9 +42,11 @@ with open('include/GL3/gl3w.h', 'wb') as f:
 extern "C" {
 #endif
 
+/* gl3w api */
 int gl3wInit(void);
+int gl3wIsSupported(int major, int minor);
 
-/* GL functions */
+/* OpenGL functions */
 ''')
     for proc in procs:
         f.write('extern %(p_t)s %(p)s;\n' % proc_t(proc))
@@ -79,8 +81,8 @@ static void close_libgl(void)
 static void *get_proc(const char *proc)
 {
 	void *res;
-	res = wglGetProcAddress(proc);
-	if (!res)
+
+	if (!(res = wglGetProcAddress(proc)))
 		res = GetProcAddress(libgl, proc);
 	return res;
 }
@@ -103,27 +105,66 @@ static void close_libgl(void)
 static void *get_proc(const char *proc)
 {
 	void *res;
-	res = glXGetProcAddress((const GLubyte *) proc);
-	if (!res)
+
+	if (!(res = glXGetProcAddress((const GLubyte *) proc)))
 		res = dlsym(libgl, proc);
 	return res;
 }
 #endif
 
-''')
-    for proc in procs:
-        f.write('%(p_t)s %(p)s;\n' % proc_t(proc))
-    f.write(r'''
+static struct {
+	int major, minor;
+} version;
+
+static int isdig(char ch)
+{
+	return ch >= '0' && ch <= '9';
+}
+
+static int parse_version(void)
+{
+	int major, minor;
+	const char *ver, *p;
+
+	if (!glGetString || !(ver = glGetString(GL_VERSION)))
+		return -1;
+	for (major = 0, p = ver; isdig(*p); p++)
+		major = 10 * major + *p - '0';
+	for (minor = 0, p++; isdig(*p); p++)
+		minor = 10 * minor + *p - '0';
+	if (major < 3)
+		return -1;
+	version.major = major;
+	version.minor = minor;
+	return 0;
+}
+
+static void load_procs(void);
 
 int gl3wInit(void)
 {
 	open_libgl();
+	load_procs();
+	close_libgl();
+	return parse_version();
+}
+
+int gl3wIsSupported(int major, int minor)
+{
+	if (major < 3)
+		return 0;
+	if (version.major == major)
+		return version.minor >= minor;
+	return version.major >= major;
+}
 
 ''')
     for proc in procs:
-        f.write('\t%(p)s = (%(p_t)s) get_proc("%(p)s");\n' % proc_t(proc))
-    f.write(r'''
-	close_libgl();
-	return 1;
-}
+        f.write('%(p_t)s %(p)s;\n' % proc_t(proc))
+    f.write('''
+static void load_procs(void)
+{
 ''')
+    for proc in procs:
+        f.write('\t%(p)s = (%(p_t)s) get_proc("%(p)s");\n' % proc_t(proc))
+    f.write('}\n')
