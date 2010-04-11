@@ -45,6 +45,7 @@ extern "C" {
 /* gl3w api */
 int gl3wInit(void);
 int gl3wIsSupported(int major, int minor);
+void *gl3wGetProcAddress(const char *proc);
 
 /* OpenGL functions */
 ''')
@@ -116,11 +117,6 @@ static struct {
 	int major, minor;
 } version;
 
-static int isdig(char ch)
-{
-	return ch >= '0' && ch <= '9';
-}
-
 static int parse_version(void)
 {
 	const char *p;
@@ -128,9 +124,9 @@ static int parse_version(void)
 
 	if (!glGetString || !(p = glGetString(GL_VERSION)))
 		return -1;
-	for (major = 0; isdig(*p); p++)
+	for (major = 0; *p >= '0' && *p <= '9'; p++)
 		major = 10 * major + *p - '0';
-	for (minor = 0, p++; isdig(*p); p++)
+	for (minor = 0, p++; *p >= '0' && *p <= '9'; p++)
 		minor = 10 * minor + *p - '0';
 	if (major < 3)
 		return -1;
@@ -156,6 +152,11 @@ int gl3wIsSupported(int major, int minor)
 	if (version.major == major)
 		return version.minor >= minor;
 	return version.major >= major;
+}
+
+void *gl3wGetProcAddress(const char *proc)
+{
+	return get_proc(proc);
 }
 
 ''')
