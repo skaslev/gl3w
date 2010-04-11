@@ -162,7 +162,7 @@ void *gl3wGetProcAddress(const char *proc)
 ''')
     for proc in procs:
         f.write('%(p_t)s %(p)s;\n' % proc_t(proc))
-    f.write('''
+    f.write(r'''
 static void load_procs(void)
 {
 ''')
