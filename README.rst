@@ -8,9 +8,9 @@ Introduction
 gl3w_ is the easiest way to get your hands on the functionality offered by
 OpenGL 3/4 core profile specification.
 
-It consists of a simple Python 2.6 script which downloads the Khronos_ supported
+It consists of a simple Python 2.6 script that downloads the Khronos_ supported
 gl3.h_ header and generates gl3w.h and gl3w.c from it. The resulting files can
-then be included and statically linked in your project.
+then be included and statically linked into your project.
 
 Example
 -------
@@ -67,8 +67,8 @@ The gl3w_ API consist of three functions:
 
 ``int gl3wIsSupported(int major, int minor)``
 
-    Returns ``1`` when *major.minor* version of OpenGL profile is available, and
-    ``0`` otherwise.
+    Returns ``1`` when OpenGL core profile version *major.minor* is available,
+    and ``0`` otherwise.
 
 ``void *gl3wGetProcAddress(const char *proc)``
 
