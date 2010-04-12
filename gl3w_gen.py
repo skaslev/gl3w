@@ -71,7 +71,7 @@ static HANDLE libgl;
 
 static void open_libgl(void)
 {
-	libgl = LoadLibrary("opengl32.dll");
+	libgl = LoadLibraryA("opengl32.dll");
 }
 
 static void close_libgl(void)
