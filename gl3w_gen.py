@@ -45,7 +45,7 @@ extern "C" {
 /* gl3w api */
 int gl3wInit(void);
 int gl3wIsSupported(int major, int minor);
-void *gl3wGetProcAddress(const char *proc);
+void (*gl3wGetProcAddress(const char *proc))();
 
 /* OpenGL functions */
 ''')
@@ -63,11 +63,13 @@ void *gl3wGetProcAddress(const char *proc);
 with open('src/gl3w.c', 'wb') as f:
     f.write(r'''#include <GL3/gl3w.h>
 
+typedef void (*gl3w_fptr)();
+
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 
-static HANDLE libgl;
+static HMODULE libgl;
 
 static void open_libgl(void)
 {
@@ -79,12 +81,12 @@ static void close_libgl(void)
 	FreeLibrary(libgl);
 }
 
-static void *get_proc(const char *proc)
+static gl3w_fptr get_proc(const char *proc)
 {
-	void *res;
+	gl3w_fptr res;
 
-	if (!(res = wglGetProcAddress(proc)))
-		res = GetProcAddress(libgl, proc);
+	if (!(res = (gl3w_fptr)wglGetProcAddress(proc)))
+		res = (gl3w_fptr)GetProcAddress(libgl, proc);
 	return res;
 }
 #else
@@ -103,12 +105,12 @@ static void close_libgl(void)
 	dlclose(libgl);
 }
 
-static void *get_proc(const char *proc)
+static gl3w_fptr get_proc(const char *proc)
 {
-	void *res;
+	gl3w_fptr res;
 
 	if (!(res = glXGetProcAddress((const GLubyte *) proc)))
-		res = dlsym(libgl, proc);
+		res = (gl3w_fptr)dlsym(libgl, proc);
 	return res;
 }
 #endif
@@ -122,7 +124,7 @@ static int parse_version(void)
 	const char *p;
 	int major, minor;
 
-	if (!glGetString || !(p = glGetString(GL_VERSION)))
+	if (!glGetString || !(p = (const char *)glGetString(GL_VERSION)))
 		return -1;
 	for (major = 0; *p >= '0' && *p <= '9'; p++)
 		major = 10 * major + *p - '0';
@@ -154,7 +156,7 @@ int gl3wIsSupported(int major, int minor)
 	return version.major >= major;
 }
 
-void *gl3wGetProcAddress(const char *proc)
+gl3w_fptr gl3wGetProcAddress(const char *proc)
 {
 	return get_proc(proc);
 }
