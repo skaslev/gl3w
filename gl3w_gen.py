@@ -67,7 +67,7 @@ with open('src/gl3w.c', 'wb') as f:
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 
-static HANDLE libgl;
+static HMODULE libgl;
 
 static void open_libgl(void)
 {
@@ -83,7 +83,8 @@ static void *get_proc(const char *proc)
 {
 	void *res;
 
-	if (!(res = wglGetProcAddress(proc)))
+	res = wglGetProcAddress(proc);
+	if (!res)
 		res = GetProcAddress(libgl, proc);
 	return res;
 }
@@ -107,7 +108,8 @@ static void *get_proc(const char *proc)
 {
 	void *res;
 
-	if (!(res = glXGetProcAddress((const GLubyte *) proc)))
+	res = glXGetProcAddress((const GLubyte *) proc);
+	if (!res)
 		res = dlsym(libgl, proc);
 	return res;
 }
@@ -122,7 +124,10 @@ static int parse_version(void)
 	const char *p;
 	int major, minor;
 
-	if (!glGetString || !(p = glGetString(GL_VERSION)))
+	if (!glGetString)
+		return -1;
+	p = (const char *) glGetString(GL_VERSION);
+	if (!p)
 		return -1;
 	for (major = 0; *p >= '0' && *p <= '9'; p++)
 		major = 10 * major + *p - '0';
