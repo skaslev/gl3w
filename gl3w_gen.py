@@ -25,7 +25,9 @@ with open('include/GL3/gl3.h', 'r') as f:
             procs.append(m.group(1))
 
 def proc_t(proc):
-    return {'p': proc, 'p_t': 'PFN' + proc.upper() + 'PROC'}
+    return { 'p': proc,
+             'p_s': 'gl3w' + proc[2:],
+             'p_t': 'PFN' + proc.upper() + 'PROC' }
 
 # Generate gl3w.h
 with open('include/GL3/gl3w.h', 'wb') as f:
@@ -50,7 +52,10 @@ void *gl3wGetProcAddress(const char *proc);
 /* OpenGL functions */
 ''')
     for proc in procs:
-        f.write('extern %(p_t)s %(p)s;\n' % proc_t(proc))
+        f.write('extern %(p_t)s %(p_s)s;\n' % proc_t(proc))
+    f.write('\n')
+    for proc in procs:
+        f.write('#define %(p)s		%(p_s)s\n' % proc_t(proc))
     f.write(r'''
 #ifdef __cplusplus
 }
@@ -166,11 +171,11 @@ void *gl3wGetProcAddress(const char *proc)
 
 ''')
     for proc in procs:
-        f.write('%(p_t)s %(p)s;\n' % proc_t(proc))
+        f.write('%(p_t)s %(p_s)s;\n' % proc_t(proc))
     f.write(r'''
 static void load_procs(void)
 {
 ''')
     for proc in procs:
-        f.write('\t%(p)s = (%(p_t)s) get_proc("%(p)s");\n' % proc_t(proc))
+        f.write('\t%(p_s)s = (%(p_t)s) get_proc("%(p)s");\n' % proc_t(proc))
     f.write('}\n')
