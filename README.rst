@@ -9,8 +9,8 @@ gl3w_ is the easiest way to get your hands on the functionality offered by
 OpenGL 3/4 core profile specification.
 
 It consists of a simple Python 2.6 script that downloads the Khronos_ supported
-gl3.h_ header and generates gl3w.h and gl3w.c from it. The resulting files can
-then be included and statically linked into your project.
+gl3.h_ header and generates gl3w.h and gl3w.c from it. Those files then can be
+added and linked (statically or dynamically) into your project.
 
 Example
 -------
