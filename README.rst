@@ -8,14 +8,16 @@ Introduction
 gl3w_ is the easiest way to get your hands on the functionality offered by
 OpenGL 3/4 core profile specification.
 
-It consists of a simple Python 2.6 script that downloads the Khronos_ supported
-gl3.h_ header and generates gl3w.h and gl3w.c from it. Those files can then be
-added and linked (statically or dynamically) into your project.
+Its main part is a simple gl3w_gen.py_ Python 2.6 script that downloads the
+Khronos_ supported gl3.h_ header and generates gl3w.h and gl3w.c from it. Those
+files can then be added and linked (statically or dynamically) into your
+project.
 
 Example
 -------
 
-Here is a simple example of using gl3w_ with glut::
+Here is a simple example of using gl3w_ with glut. Note that GL3/gl3w.h must be
+included before any other OpenGL related headers::
 
     #include <stdio.h>
     #include <GL3/gl3w.h>
@@ -57,7 +59,7 @@ Here is a simple example of using gl3w_ with glut::
 API Reference
 -------------
 
-The gl3w_ API consist of three functions:
+The gl3w_ API consist of just three functions:
 
 ``int gl3wInit(void)``
 
@@ -72,9 +74,9 @@ The gl3w_ API consist of three functions:
 
 ``void *gl3wGetProcAddress(const char *proc)``
 
-    Returns the address of an OpenGL extension function. You probably won't need
-    to use this function since gl3w_ loads all the functions defined in the
-    OpenGL core profile. It's only exposed for completeness.
+    Returns the address of an OpenGL extension function. Generally, you won't
+    need to use it since gl3w_ loads all the functions defined in the OpenGL
+    core profile. It's only exposed for completeness.
 
 License
 -------
@@ -88,7 +90,8 @@ Copyright
 
 OpenGL_ is a registered trademark of SGI_.
 
-.. _gl3w: http://github.com/skaslev/gl3w
+.. _gl3w: https://github.com/skaslev/gl3w
+.. _gl3w_gen.py: https://github.com/skaslev/gl3w/blob/master/gl3w_gen.py
 .. _gl3.h: http://www.opengl.org/registry/api/gl3.h
 .. _OpenGL: http://www.opengl.org/
 .. _Khronos: http://www.khronos.org/
