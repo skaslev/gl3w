@@ -1,3 +1,6 @@
 .sconsign.dblite
 *.o
 *.os
+bin
+include
+src/gl3w.c
