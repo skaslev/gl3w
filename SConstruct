@@ -7,7 +7,7 @@ if env.GetOption('clean'):
     try: os.unlink('src/gl3w.c')
     except: pass
 else:
-    print 'generating gl3w...'
+    print 'Generating gl3w...'
     execfile('gl3w_gen.py')
 
 env.Append(CFLAGS=['-Wall', '-O2'])
