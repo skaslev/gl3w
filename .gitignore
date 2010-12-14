@@ -1,2 +1,7 @@
-include/
-src/
+.sconsign.dblite
+*.o
+*.os
+bin
+lib
+include
+src/gl3w.c
