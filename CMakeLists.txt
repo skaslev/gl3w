@@ -6,7 +6,6 @@ project(libgl3w)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 # set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
-
 include_directories(include/)
 
 if (WIN32)
@@ -18,3 +17,4 @@ else (WIN32)
 endif (WIN32)
 
 # todo: add test executable
+
