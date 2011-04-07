@@ -101,29 +101,29 @@ CFURLRef bundleURL;
 
 static void open_libgl(void)
 {
-bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorDefault,
-CFSTR("/System/Library/Frameworks/OpenGL.framework"),
-kCFURLPOSIXPathStyle, true );
+	bundleURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
+		CFSTR("/System/Library/Frameworks/OpenGL.framework"),
+		kCFURLPOSIXPathStyle, true);
 
-bundle = CFBundleCreate( kCFAllocatorDefault, bundleURL );
-assert( bundle != NULL );
+	bundle = CFBundleCreate(kCFAllocatorDefault, bundleURL);
+	assert(bundle != NULL);
 }
 
 static void close_libgl(void)
 {
-CFRelease( bundle );
-CFRelease( bundleURL );
+	CFRelease(bundle);
+	CFRelease(bundleURL);
 }
 
 static void *get_proc(const char *proc)
 {
-void *res;
+	void *res;
 
-CFStringRef procname = CFStringCreateWithCString( kCFAllocatorDefault, proc,
-kCFStringEncodingASCII );
-res = CFBundleGetFunctionPointerForName( bundle, procname );
-CFRelease( procname );
-return res;
+	CFStringRef procname = CFStringCreateWithCString(kCFAllocatorDefault, proc,
+		kCFStringEncodingASCII);
+	res = CFBundleGetFunctionPointerForName(bundle, procname);
+	CFRelease(procname);
+	return res;
 }
 #else
 #include <dlfcn.h>
