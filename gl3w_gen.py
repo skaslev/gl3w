@@ -93,6 +93,38 @@ static void *get_proc(const char *proc)
 		res = GetProcAddress(libgl, proc);
 	return res;
 }
+#elif defined(__APPLE__) || defined(__APPLE_CC__)
+#include <Carbon/Carbon.h>
+
+CFBundleRef bundle;
+CFURLRef bundleURL;
+
+static void open_libgl(void)
+{
+bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorDefault,
+CFSTR("/System/Library/Frameworks/OpenGL.framework"),
+kCFURLPOSIXPathStyle, true );
+
+bundle = CFBundleCreate( kCFAllocatorDefault, bundleURL );
+assert( bundle != NULL );
+}
+
+static void close_libgl(void)
+{
+CFRelease( bundle );
+CFRelease( bundleURL );
+}
+
+static void *get_proc(const char *proc)
+{
+void *res;
+
+CFStringRef procname = CFStringCreateWithCString( kCFAllocatorDefault, proc,
+kCFStringEncodingASCII );
+res = CFBundleGetFunctionPointerForName( bundle, procname );
+CFRelease( procname );
+return res;
+}
 #else
 #include <dlfcn.h>
 #include <GL/glx.h>
