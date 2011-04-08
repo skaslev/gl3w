@@ -83,10 +83,17 @@ License
 
 gl3w_ is in the puclic domain.
 
+Credits
+-------
+
+Slavomir Kaslev <slavomir.kaslev@gmail.com>
+    Initial implementation
+
+Kelvin McDowell
+    Mac OS X support
+
 Copyright
 ---------
-
-2010 Slavomir Kaslev <slavomir.kaslev@gmail.com>
 
 OpenGL_ is a registered trademark of SGI_.
 
