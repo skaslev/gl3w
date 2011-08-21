@@ -76,7 +76,8 @@ The gl3w_ API consist of just three functions:
 
     Returns the address of an OpenGL extension function. Generally, you won't
     need to use it since gl3w_ loads all the functions defined in the OpenGL
-    core profile. It's only exposed for completeness.
+    core profile on initialization. It allows you to load OpenGL extensions
+    outside of the core profile.
 
 License
 -------
