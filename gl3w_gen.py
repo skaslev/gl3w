@@ -158,22 +158,14 @@ static struct {
 
 static int parse_version(void)
 {
-	const char *p;
-	int major, minor;
+	if (!glGetIntegerv)
+		return -1;
 
-	if (!glGetString)
+	glGetIntegerv(GL_MAJOR_VERSION, &version.major);
+	glGetIntegerv(GL_MINOR_VERSION, &version.minor);
+
+	if (version.major < 3)
 		return -1;
-	p = (const char *) glGetString(GL_VERSION);
-	if (!p)
-		return -1;
-	for (major = 0; *p >= '0' && *p <= '9'; p++)
-		major = 10 * major + *p - '0';
-	for (minor = 0, p++; *p >= '0' && *p <= '9'; p++)
-		minor = 10 * minor + *p - '0';
-	if (major < 3)
-		return -1;
-	version.major = major;
-	version.minor = minor;
 	return 0;
 }
 
