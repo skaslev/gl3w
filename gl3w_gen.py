@@ -11,11 +11,15 @@ if not os.path.exists('src'):
 
 # Download gl3.h
 if not os.path.exists('include/GL3/gl3.h'):
+    print 'Downloading gl3.h to include/GL3...'
     web = urllib2.urlopen('http://www.opengl.org/registry/api/gl3.h')
     with open('include/GL3/gl3.h', 'wb') as f:
         f.writelines(web.readlines())
+else:
+    print 'Reusing gl3.h from include/GL3...'
 
 # Parse function names from gl3.h
+print 'Parsing gl3.h header...'
 procs = []
 p = re.compile(r'GLAPI.*APIENTRY\s+(\w+)')
 with open('include/GL3/gl3.h', 'r') as f:
@@ -30,6 +34,7 @@ def proc_t(proc):
              'p_t': 'PFN' + proc.upper() + 'PROC' }
 
 # Generate gl3w.h
+print 'Generating gl3w.h in include/GL3...'
 with open('include/GL3/gl3w.h', 'wb') as f:
     f.write(r'''#ifndef __gl3w_h_
 #define __gl3w_h_
@@ -65,6 +70,7 @@ void *gl3wGetProcAddress(const char *proc);
 ''')
 
 # Generate gl3w.c
+print 'Generating gl3w.c in src...'
 with open('src/gl3w.c', 'wb') as f:
     f.write(r'''#include <GL3/gl3w.h>
 
