@@ -82,7 +82,7 @@ The gl3w_ API consist of just three functions:
 License
 -------
 
-gl3w_ is in the puclic domain.
+gl3w_ is in the public domain.
 
 Credits
 -------
