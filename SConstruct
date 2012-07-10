@@ -1,4 +1,4 @@
-import os, shutil
+import os, shutil, platform
 
 env = Environment()
 if env.GetOption('clean'):
@@ -9,6 +9,11 @@ if env.GetOption('clean'):
 else:
     print 'Generating gl3w...'
     execfile('gl3w_gen.py')
+
+if platform.system() == 'Darwin':
+    env.Append(CFLAGS=['-I/sw/include', '-I/opt/local/include', '-I/usr/X11/include'])
+    env.Append(LINKFLAGS=['-L/sw/lib', '-I/opt/local/lib'])
+    env.Append(FRAMEWORKS=['CoreFoundation'])
 
 env.Append(CFLAGS=['-Wall', '-O2'])
 env.Append(CPPPATH='include')
