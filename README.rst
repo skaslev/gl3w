@@ -93,6 +93,9 @@ Slavomir Kaslev <slavomir.kaslev@gmail.com>
 Kelvin McDowell
     Mac OS X support
 
+Sjors Gielen
+    Mac OS X support
+
 Rommel160 [github.com/Rommel160]
     Code contributions
 
