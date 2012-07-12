@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL3/gl3w.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
 
 static int width = 600, height = 600;
 
