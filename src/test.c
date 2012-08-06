@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <GL3/gl3w.h>
+#include <GL/gl3w.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
