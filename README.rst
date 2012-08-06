@@ -9,18 +9,18 @@ gl3w_ is the easiest way to get your hands on the functionality offered by
 OpenGL 3/4 core profile specification.
 
 Its main part is a simple gl3w_gen.py_ Python 2.6 script that downloads the
-Khronos_ supported gl3.h_ header and generates gl3w.h and gl3w.c from it. Those
-files can then be added and linked (statically or dynamically) into your
+Khronos_ supported glcorearb.h_ header and generates gl3w.h and gl3w.c from it.
+Those files can then be added and linked (statically or dynamically) into your
 project.
 
 Example
 -------
 
-Here is a simple example of using gl3w_ with glut. Note that GL3/gl3w.h must be
+Here is a simple example of using gl3w_ with glut. Note that GL/gl3w.h must be
 included before any other OpenGL related headers::
 
     #include <stdio.h>
-    #include <GL3/gl3w.h>
+    #include <GL/gl3w.h>
     #include <GL/glut.h>
 
     // ...
@@ -106,7 +106,7 @@ OpenGL_ is a registered trademark of SGI_.
 
 .. _gl3w: https://github.com/skaslev/gl3w
 .. _gl3w_gen.py: https://github.com/skaslev/gl3w/blob/master/gl3w_gen.py
-.. _gl3.h: http://www.opengl.org/registry/api/gl3.h
+.. _glcorearb.h: http://www.opengl.org/registry/api/glcorearb.h
 .. _OpenGL: http://www.opengl.org/
 .. _Khronos: http://www.khronos.org/
 .. _SGI: http://www.sgi.com/

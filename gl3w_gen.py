@@ -4,25 +4,25 @@ import os
 import urllib2
 
 # Create directories
-if not os.path.exists('include/GL3'):
-    os.makedirs('include/GL3')
+if not os.path.exists('include/GL'):
+    os.makedirs('include/GL')
 if not os.path.exists('src'):
     os.makedirs('src')
 
-# Download gl3.h
-if not os.path.exists('include/GL3/gl3.h'):
-    print 'Downloading gl3.h to include/GL3...'
-    web = urllib2.urlopen('http://www.opengl.org/registry/api/gl3.h')
-    with open('include/GL3/gl3.h', 'wb') as f:
+# Download glcorearb.h
+if not os.path.exists('include/GL/glcorearb.h'):
+    print 'Downloading glcorearb.h to include/GL...'
+    web = urllib2.urlopen('http://www.opengl.org/registry/api/glcorearb.h')
+    with open('include/GL/glcorearb.h', 'wb') as f:
         f.writelines(web.readlines())
 else:
-    print 'Reusing gl3.h from include/GL3...'
+    print 'Reusing glcorearb.h from include/GL...'
 
-# Parse function names from gl3.h
-print 'Parsing gl3.h header...'
+# Parse function names from glcorearb.h
+print 'Parsing glcorearb.h header...'
 procs = []
 p = re.compile(r'GLAPI.*APIENTRY\s+(\w+)')
-with open('include/GL3/gl3.h', 'r') as f:
+with open('include/GL/glcorearb.h', 'r') as f:
     for line in f:
         m = p.match(line)
         if m:
@@ -34,12 +34,12 @@ def proc_t(proc):
              'p_t': 'PFN' + proc.upper() + 'PROC' }
 
 # Generate gl3w.h
-print 'Generating gl3w.h in include/GL3...'
-with open('include/GL3/gl3w.h', 'wb') as f:
+print 'Generating gl3w.h in include/GL...'
+with open('include/GL/gl3w.h', 'wb') as f:
     f.write(r'''#ifndef __gl3w_h_
 #define __gl3w_h_
 
-#include <GL3/gl3.h>
+#include <GL/glcorearb.h>
 
 #ifndef __gl_h_
 #define __gl_h_
@@ -72,7 +72,7 @@ void *gl3wGetProcAddress(const char *proc);
 # Generate gl3w.c
 print 'Generating gl3w.c in src...'
 with open('src/gl3w.c', 'wb') as f:
-    f.write(r'''#include <GL3/gl3w.h>
+    f.write(r'''#include <GL/gl3w.h>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN 1
