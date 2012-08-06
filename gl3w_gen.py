@@ -9,20 +9,20 @@ if not os.path.exists('include/GL3'):
 if not os.path.exists('src'):
     os.makedirs('src')
 
-# Download gl3.h
-if not os.path.exists('include/GL3/gl3.h'):
-    print 'Downloading gl3.h to include/GL3...'
-    web = urllib2.urlopen('http://www.opengl.org/registry/api/gl3.h')
-    with open('include/GL3/gl3.h', 'wb') as f:
+# Download glcorearb.h
+if not os.path.exists('include/GL/glcorearb.h'):
+    print 'Downloading glcorearb.h to include/GL3...'
+    web = urllib2.urlopen('http://www.opengl.org/registry/api/glcorearb.h')
+    with open('include/GL/glcorearb.h', 'wb') as f:
         f.writelines(web.readlines())
 else:
-    print 'Reusing gl3.h from include/GL3...'
+    print 'Reusing glcorearb.h from include/GL3...'
 
-# Parse function names from gl3.h
-print 'Parsing gl3.h header...'
+# Parse function names from glcorearb.h
+print 'Parsing glcorearb.h header...'
 procs = []
 p = re.compile(r'GLAPI.*APIENTRY\s+(\w+)')
-with open('include/GL3/gl3.h', 'r') as f:
+with open('include/GL/glcorearb.h', 'r') as f:
     for line in f:
         m = p.match(line)
         if m:
@@ -39,7 +39,7 @@ with open('include/GL3/gl3w.h', 'wb') as f:
     f.write(r'''#ifndef __gl3w_h_
 #define __gl3w_h_
 
-#include <GL3/gl3.h>
+#include <GL/glcorearb.h>
 
 #ifndef __gl_h_
 #define __gl_h_
