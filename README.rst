@@ -5,7 +5,7 @@ gl3w: Simple OpenGL 3/4 core profile loading
 Introduction
 ------------
 
-gl3w_ is the easiest way to get your hands on the functionality offered by
+gl3w_ is the easiest way to get your hands on the functionality offered by the
 OpenGL 3/4 core profile specification.
 
 Its main part is a simple gl3w_gen.py_ Python 2.6 script that downloads the
@@ -59,7 +59,7 @@ included before any other OpenGL related headers::
 API Reference
 -------------
 
-The gl3w_ API consist of just three functions:
+The gl3w_ API consists of just three functions:
 
 ``int gl3wInit(void)``
 
