@@ -12,7 +12,7 @@ if not os.path.exists('src'):
 # Download gl3.h
 if not os.path.exists('include/GL3/gl3.h'):
     print 'Downloading gl3.h to include/GL3...'
-    web = urllib2.urlopen('http://www.opengl.org/registry/api/gl3.h')
+    web = urllib2.urlopen('http://www.opengl.org/registry/oldspecs/glcorearb.h')
     with open('include/GL3/gl3.h', 'wb') as f:
         f.writelines(web.readlines())
 else:
