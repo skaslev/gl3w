@@ -1,14 +1,14 @@
-============================================
-gl3w: Simple OpenGL 3/4 core profile loading
-============================================
+========================================
+gl3w: Simple OpenGL core profile loading
+========================================
 
 Introduction
 ------------
 
 gl3w_ is the easiest way to get your hands on the functionality offered by the
-OpenGL 3/4 core profile specification.
+OpenGL core profile specification.
 
-Its main part is a simple gl3w_gen.py_ Python 2.6 script that downloads the
+Its main part is a simple gl3w_gen.py_ Python script that downloads the
 Khronos_ supported glcorearb.h_ header and generates gl3w.h and gl3w.c from it.
 Those files can then be added and linked (statically or dynamically) into your
 project.
@@ -95,6 +95,9 @@ Kelvin McDowell
 
 Sjors Gielen
     Mac OS X support
+
+Travis Gesslein
+    Patches regarding glcorearb.h
 
 Rommel160 [github.com/Rommel160]
     Code contributions
