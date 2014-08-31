@@ -72,7 +72,7 @@ The gl3w_ API consists of just three functions:
     Returns ``1`` when OpenGL core profile version *major.minor* is available,
     and ``0`` otherwise.
 
-``void *gl3wGetProcAddress(const char *proc)``
+``GL3WglProc gl3wGetProcAddress(const char *proc)``
 
     Returns the address of an OpenGL extension function. Generally, you won't
     need to use it since gl3w_ loads all the functions defined in the OpenGL
