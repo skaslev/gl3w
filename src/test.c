@@ -5,6 +5,7 @@
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
+#include <GL/freeglut_ext.h>
 #endif
 
 static int width = 600, height = 600;
@@ -38,8 +39,12 @@ int main(int argc, char **argv)
 	unsigned mode = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE;
 #ifdef __APPLE__
 	mode |= GLUT_3_2_CORE_PROFILE;
-#endif
 	glutInitDisplayMode(mode);
+#else
+	glutInitDisplayMode(mode);
+        glutInitContextVersion (3, 2);
+        glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
+#endif
 	glutInitWindowSize(width, height);
 	glutCreateWindow("cookie");
 
