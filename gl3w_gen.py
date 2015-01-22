@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Allow Python 2.6+ to use the print() function
+from __future__ import print_function
+
 import re
 import os
 import urllib2
@@ -11,15 +15,15 @@ if not os.path.exists('src'):
 
 # Download glcorearb.h
 if not os.path.exists('include/GL/glcorearb.h'):
-    print 'Downloading glcorearb.h to include/GL...'
+    print('Downloading glcorearb.h to include/GL...')
     web = urllib2.urlopen('http://www.opengl.org/registry/api/glcorearb.h')
     with open('include/GL/glcorearb.h', 'wb') as f:
         f.writelines(web.readlines())
 else:
-    print 'Reusing glcorearb.h from include/GL...'
+    print('Reusing glcorearb.h from include/GL...')
 
 # Parse function names from glcorearb.h
-print 'Parsing glcorearb.h header...'
+print('Parsing glcorearb.h header...')
 procs = []
 p = re.compile(r'GLAPI.*APIENTRY\s+(\w+)')
 with open('include/GL/glcorearb.h', 'r') as f:
@@ -34,7 +38,7 @@ def proc_t(proc):
              'p_t': 'PFN' + proc.upper() + 'PROC' }
 
 # Generate gl3w.h
-print 'Generating gl3w.h in include/GL...'
+print('Generating gl3w.h in include/GL...')
 with open('include/GL/gl3w.h', 'wb') as f:
     f.write(r'''#ifndef __gl3w_h_
 #define __gl3w_h_
@@ -72,7 +76,7 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 ''')
 
 # Generate gl3w.c
-print 'Generating gl3w.c in src...'
+print('Generating gl3w.c in src...')
 with open('src/gl3w.c', 'wb') as f:
     f.write(r'''#include <GL/gl3w.h>
 
