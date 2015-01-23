@@ -5,7 +5,13 @@ from __future__ import print_function
 
 import re
 import os
-import urllib2
+
+# Try to import Python 3 library urllib.request
+# and if it fails, fall back to Python 2 urllib2
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
 # Create directories
 if not os.path.exists('include/GL'):
