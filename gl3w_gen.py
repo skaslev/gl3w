@@ -63,10 +63,10 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 /* OpenGL functions */
 ''')
     for proc in procs:
-        f.write('extern %(p_t)s %(p_s)s;\n' % proc_t(proc))
+        f.write('extern {0[p_t]} {0[p_s]};\n'.format(proc_t(proc)))
     f.write('\n')
     for proc in procs:
-        f.write('#define %(p)s		%(p_s)s\n' % proc_t(proc))
+        f.write('#define {0[p]}\t\t{0[p_s]}\n'.format(proc_t(proc)))
     f.write(r'''
 #ifdef __cplusplus
 }
@@ -207,11 +207,11 @@ GL3WglProc gl3wGetProcAddress(const char *proc)
 
 ''')
     for proc in procs:
-        f.write('%(p_t)s %(p_s)s;\n' % proc_t(proc))
+        f.write('{0[p_t]} {0[p_s]};\n'.format(proc_t(proc)))
     f.write(r'''
 static void load_procs(void)
 {
 ''')
     for proc in procs:
-        f.write('\t%(p_s)s = (%(p_t)s) get_proc("%(p)s");\n' % proc_t(proc))
+        f.write('\t{0[p_s]} = ({0[p_t]}) get_proc("{0[p]}");\n'.format(proc_t(proc)))
     f.write('}\n')
