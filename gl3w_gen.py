@@ -46,7 +46,7 @@ def proc_t(proc):
 # Generate gl3w.h
 print('Generating gl3w.h in include/GL...')
 with open('include/GL/gl3w.h', 'wb') as f:
-    f.write(r'''#ifndef __gl3w_h_
+    f.write(br'''#ifndef __gl3w_h_
 #define __gl3w_h_
 
 #include <GL/glcorearb.h>
@@ -70,10 +70,10 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 ''')
     for proc in procs:
         f.write('extern {0[p_t]} {0[p_s]};\n'.format(proc_t(proc)))
-    f.write('\n')
+    f.write(b'\n')
     for proc in procs:
         f.write('#define {0[p]}\t\t{0[p_s]}\n'.format(proc_t(proc)))
-    f.write(r'''
+    f.write(br'''
 #ifdef __cplusplus
 }
 #endif
@@ -84,7 +84,7 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 # Generate gl3w.c
 print('Generating gl3w.c in src...')
 with open('src/gl3w.c', 'wb') as f:
-    f.write(r'''#include <GL/gl3w.h>
+    f.write(br'''#include <GL/gl3w.h>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN 1
@@ -214,10 +214,10 @@ GL3WglProc gl3wGetProcAddress(const char *proc)
 ''')
     for proc in procs:
         f.write('{0[p_t]} {0[p_s]};\n'.format(proc_t(proc)))
-    f.write(r'''
+    f.write(br'''
 static void load_procs(void)
 {
 ''')
     for proc in procs:
         f.write('\t{0[p_s]} = ({0[p_t]}) get_proc("{0[p]}");\n'.format(proc_t(proc)))
-    f.write('}\n')
+    f.write(b'}\n')
