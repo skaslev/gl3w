@@ -99,6 +99,9 @@ Sjors Gielen
 Travis Gesslein
     Patches regarding glcorearb.h
 
+Arthur Tombs
+    Port to Python 3
+
 Rommel160 [github.com/Rommel160]
     Code contributions
 
