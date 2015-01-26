@@ -13,6 +13,12 @@ Khronos_ supported glcorearb.h_ header and generates gl3w.h and gl3w.c from it.
 Those files can then be added and linked (statically or dynamically) into your
 project.
 
+Requirements
+------------
+
+gl3w_gen.py_ requires Python version 2.x (2.6 or higher) built with SSL
+support. It is not compatible with Python 3.x releases.
+
 Example
 -------
 
