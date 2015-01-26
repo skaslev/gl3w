@@ -1,7 +1,17 @@
 #!/usr/bin/env python
+
+# Allow Python 2.6+ to use the print() function
+from __future__ import print_function
+
 import re
 import os
-import urllib2
+
+# Try to import Python 3 library urllib.request
+# and if it fails, fall back to Python 2 urllib2
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
 # Create directories
 if not os.path.exists('include/GL'):
@@ -11,15 +21,15 @@ if not os.path.exists('src'):
 
 # Download glcorearb.h
 if not os.path.exists('include/GL/glcorearb.h'):
-    print 'Downloading glcorearb.h to include/GL...'
+    print('Downloading glcorearb.h to include/GL...')
     web = urllib2.urlopen('http://www.opengl.org/registry/api/glcorearb.h')
     with open('include/GL/glcorearb.h', 'wb') as f:
         f.writelines(web.readlines())
 else:
-    print 'Reusing glcorearb.h from include/GL...'
+    print('Reusing glcorearb.h from include/GL...')
 
 # Parse function names from glcorearb.h
-print 'Parsing glcorearb.h header...'
+print('Parsing glcorearb.h header...')
 procs = []
 p = re.compile(r'GLAPI.*APIENTRY\s+(\w+)')
 with open('include/GL/glcorearb.h', 'r') as f:
@@ -34,9 +44,9 @@ def proc_t(proc):
              'p_t': 'PFN' + proc.upper() + 'PROC' }
 
 # Generate gl3w.h
-print 'Generating gl3w.h in include/GL...'
+print('Generating gl3w.h in include/GL...')
 with open('include/GL/gl3w.h', 'wb') as f:
-    f.write(r'''#ifndef __gl3w_h_
+    f.write(br'''#ifndef __gl3w_h_
 #define __gl3w_h_
 
 #include <GL/glcorearb.h>
@@ -59,11 +69,11 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 /* OpenGL functions */
 ''')
     for proc in procs:
-        f.write('extern %(p_t)s %(p_s)s;\n' % proc_t(proc))
-    f.write('\n')
+        f.write('extern {0[p_t]} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
+    f.write(b'\n')
     for proc in procs:
-        f.write('#define %(p)s		%(p_s)s\n' % proc_t(proc))
-    f.write(r'''
+        f.write('#define {0[p]}\t\t{0[p_s]}\n'.format(proc_t(proc)).encode("utf-8"))
+    f.write(br'''
 #ifdef __cplusplus
 }
 #endif
@@ -72,9 +82,9 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 ''')
 
 # Generate gl3w.c
-print 'Generating gl3w.c in src...'
+print('Generating gl3w.c in src...')
 with open('src/gl3w.c', 'wb') as f:
-    f.write(r'''#include <GL/gl3w.h>
+    f.write(br'''#include <GL/gl3w.h>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN 1
@@ -203,11 +213,11 @@ GL3WglProc gl3wGetProcAddress(const char *proc)
 
 ''')
     for proc in procs:
-        f.write('%(p_t)s %(p_s)s;\n' % proc_t(proc))
-    f.write(r'''
+        f.write('{0[p_t]} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
+    f.write(br'''
 static void load_procs(void)
 {
 ''')
     for proc in procs:
-        f.write('\t%(p_s)s = (%(p_t)s) get_proc("%(p)s");\n' % proc_t(proc))
-    f.write('}\n')
+        f.write('\t{0[p_s]} = ({0[p_t]}) get_proc("{0[p]}");\n'.format(proc_t(proc)).encode("utf-8"))
+    f.write(b'}\n')
