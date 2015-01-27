@@ -118,7 +118,7 @@ OpenGL_ is a registered trademark of SGI_.
 
 .. _gl3w: https://github.com/skaslev/gl3w
 .. _gl3w_gen.py: https://github.com/skaslev/gl3w/blob/master/gl3w_gen.py
-.. _glcorearb.h: http://www.opengl.org/registry/api/glcorearb.h
+.. _glcorearb.h: https://www.opengl.org/registry/api/GL/glcorearb.h
 .. _OpenGL: http://www.opengl.org/
 .. _Khronos: http://www.khronos.org/
 .. _SGI: http://www.sgi.com/

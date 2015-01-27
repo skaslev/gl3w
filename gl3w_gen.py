@@ -80,7 +80,7 @@ if not os.path.exists('src'):
 # Download glcorearb.h
 if not os.path.exists('include/GL/glcorearb.h'):
     print('Downloading glcorearb.h to include/GL...')
-    web = urllib2.urlopen('http://www.opengl.org/registry/api/glcorearb.h')
+    web = urllib2.urlopen('https://www.opengl.org/registry/api/GL/glcorearb.h')
     with open('include/GL/glcorearb.h', 'wb') as f:
         f.writelines(web.readlines())
 else:
