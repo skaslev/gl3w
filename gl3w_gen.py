@@ -131,7 +131,7 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
         f.write('extern {0[p_t]} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
     f.write(b'\n')
     for proc in procs:
-        f.write('#define {0[p]}\t\t{0[p_s]}\n'.format(proc_t(proc)).encode("utf-8"))
+        f.write('#define {0[p]: <45} {0[p_s]}\n'.format(proc_t(proc)).encode("utf-8"))
     f.write(br'''
 #ifdef __cplusplus
 }
