@@ -95,6 +95,7 @@ with open('include/GL/glcorearb.h', 'r') as f:
         m = p.match(line)
         if m:
             procs.append(m.group(1))
+procs.sort()
 
 def proc_t(proc):
     return { 'p': proc,
@@ -128,7 +129,7 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 /* OpenGL functions */
 ''')
     for proc in procs:
-        f.write('extern {0[p_t]} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
+        f.write('extern {0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
     f.write(b'\n')
     for proc in procs:
         f.write('#define {0[p]: <45} {0[p_s]}\n'.format(proc_t(proc)).encode("utf-8"))
@@ -273,7 +274,7 @@ GL3WglProc gl3wGetProcAddress(const char *proc)
 
 ''')
     for proc in procs:
-        f.write('{0[p_t]} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
+        f.write('{0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
     f.write(br'''
 static void load_procs(void)
 {
