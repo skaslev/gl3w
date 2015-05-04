@@ -1,11 +1,17 @@
-cmake_minimum_required(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(gl3w C)
 
-project(gl3w)
+FIND_PACKAGE(PythonInterp 2.6 REQUIRED)
+EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} 
+    ${CMAKE_CURRENT_SOURCE_DIR}/gl3w_gen.py
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/include
+)
+ADD_LIBRARY(gl3w ${CMAKE_CURRENT_BINARY_DIR}/src/gl3w.c)
+IF(UNIX)
+    TARGET_LINK_LIBRARIES(gl3w dl)
+ENDIF()
 
-include_directories(include)
-
-add_library(gl3w src/gl3w.c)
-
-if (UNIX)
-  target_link_libraries(gl3w dl)
-endif()
+SET(GL3W_FOUND)
+SET(GL3W_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/include)
+SET(GL3W_LIBRARY gl3w)
