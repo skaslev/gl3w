@@ -45,7 +45,7 @@ included before any other OpenGL related headers::
             glutMouseFunc(mouse);
             glutMotionFunc(motion);
 
-            if (gl3wInit()) {
+            if (!gl3wInit()) {
                     fprintf(stderr, "failed to initialize OpenGL\n");
                     return -1;
             }
