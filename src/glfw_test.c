@@ -58,12 +58,14 @@ static void reshape(GLFWwindow * window, int w, int h)
 
 int main(int argc, char **argv)
 {
+    GLFWwindow * window;
+
     glfwInit();
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    GLFWwindow * window = glfwCreateWindow(width, height, "cookie", NULL, NULL);
+    window = glfwCreateWindow(width, height, "cookie", NULL, NULL);
 
     glfwSetFramebufferSizeCallback(window, reshape);
     glfwSetWindowRefreshCallback(window, display);
