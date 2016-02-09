@@ -209,10 +209,12 @@ static GL3WglProc get_proc(const char *proc)
 #include <GL/glx.h>
 
 static void *libgl;
+static PFNGLXGETPROCADDRESSPROC GetProcAddress;
 
 static void open_libgl(void)
 {
 	libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_GLOBAL);
+	GetProcAddress = (PFNGLXGETPROCADDRESSPROC) dlsym(libgl, "glXGetProcAddress");
 }
 
 static void close_libgl(void)
@@ -224,7 +226,7 @@ static GL3WglProc get_proc(const char *proc)
 {
 	GL3WglProc res;
 
-	res = (GL3WglProc) glXGetProcAddress((const GLubyte *) proc);
+	res = (GL3WglProc) GetProcAddress((const GLubyte *) proc);
 	if (!res)
 		res = (GL3WglProc) dlsym(libgl, proc);
 	return res;
