@@ -15,7 +15,7 @@ if platform.system() == 'Darwin':
     env.Append(CFLAGS=['-Wno-deprecated-declarations'],
                FRAMEWORKS=['CoreFoundation', 'GLUT'])
 else:
-    libs = ['GL', 'glut', 'dl']
+    libs = ['glut', 'dl']
 
 env.Append(CFLAGS=['-Wall', '-O2'])
 env.Append(CPPPATH='include')
