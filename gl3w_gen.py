@@ -30,6 +30,7 @@ from __future__ import print_function
 
 import re
 import os
+import ssl
 
 # Try to import Python 3 library urllib.request
 # and if it fails, fall back to Python 2 urllib2
@@ -80,7 +81,8 @@ if not os.path.exists('src'):
 # Download glcorearb.h
 if not os.path.exists('include/GL/glcorearb.h'):
     print('Downloading glcorearb.h to include/GL...')
-    web = urllib2.urlopen('https://www.opengl.org/registry/api/GL/glcorearb.h')
+    context = ssl._create_unverified_context()
+    web = urllib2.urlopen('https://www.opengl.org/registry/api/GL/glcorearb.h', context=context)
     with open('include/GL/glcorearb.h', 'wb') as f:
         f.writelines(web.readlines())
 else:
