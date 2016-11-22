@@ -100,9 +100,11 @@ with open('include/GL/glcorearb.h', 'r') as f:
 procs.sort()
 
 def proc_t(proc):
-    return { 'p': proc,
-             'p_s': 'gl3w' + proc[2:],
-             'p_t': 'PFN' + proc.upper() + 'PROC' }
+    return {
+        'p': proc,
+        'p_s': 'gl3w' + proc[2:],
+        'p_t': 'PFN' + proc.upper() + 'PROC'
+    }
 
 # Generate gl3w.h
 print('Generating gl3w.h in include/GL...')
@@ -169,9 +171,9 @@ static GL3WglProc get_proc(const char *proc)
 {
 	GL3WglProc res;
 
-	res = (GL3WglProc) wglGetProcAddress(proc);
+	res = (GL3WglProc)wglGetProcAddress(proc);
 	if (!res)
-		res = (GL3WglProc) GetProcAddress(libgl, proc);
+		res = (GL3WglProc)GetProcAddress(libgl, proc);
 	return res;
 }
 #elif defined(__APPLE__) || defined(__APPLE_CC__)
@@ -202,7 +204,7 @@ static GL3WglProc get_proc(const char *proc)
 
 	CFStringRef procname = CFStringCreateWithCString(kCFAllocatorDefault, proc,
 		kCFStringEncodingASCII);
-	res = (GL3WglProc) CFBundleGetFunctionPointerForName(bundle, procname);
+	*(void **)(&res) = CFBundleGetFunctionPointerForName(bundle, procname);
 	CFRelease(procname);
 	return res;
 }
@@ -216,7 +218,7 @@ static PFNGLXGETPROCADDRESSPROC glx_get_proc_address;
 static void open_libgl(void)
 {
 	libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_GLOBAL);
-	glx_get_proc_address = (PFNGLXGETPROCADDRESSPROC) dlsym(libgl, "glXGetProcAddressARB");
+	*(void **)(&glx_get_proc_address) = dlsym(libgl, "glXGetProcAddressARB");
 }
 
 static void close_libgl(void)
@@ -228,9 +230,9 @@ static GL3WglProc get_proc(const char *proc)
 {
 	GL3WglProc res;
 
-	res = (GL3WglProc) glx_get_proc_address((const GLubyte *) proc);
+	res = glx_get_proc_address((const GLubyte *)proc);
 	if (!res)
-		res = (GL3WglProc) dlsym(libgl, proc);
+		*(void **)(&res) = dlsym(libgl, proc);
 	return res;
 }
 #endif
@@ -284,5 +286,5 @@ static void load_procs(void)
 {
 ''')
     for proc in procs:
-        f.write('\t{0[p_s]} = ({0[p_t]}) get_proc("{0[p]}");\n'.format(proc_t(proc)).encode('utf-8'))
+        f.write('\t{0[p_s]} = ({0[p_t]})get_proc("{0[p]}");\n'.format(proc_t(proc)).encode('utf-8'))
     f.write(b'}\n')
