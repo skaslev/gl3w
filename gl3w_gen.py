@@ -31,6 +31,7 @@ from __future__ import print_function
 import re
 import os
 import ssl
+import sys
 
 # Try to import Python 3 library urllib.request
 # and if it fails, fall back to Python 2 urllib2
@@ -72,7 +73,7 @@ UNLICENSE = br'''/*
 
 '''
 
-root_dir = ""
+root_dir = ''
 if len(sys.argv) > 1:
     root_dir = sys.argv[1]
 
