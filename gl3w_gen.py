@@ -91,7 +91,7 @@ if not os.path.exists(os.path.join(root_dir, 'include/GL/glcorearb.h')):
     with open(os.path.join(root_dir, 'include/GL/glcorearb.h'), 'wb') as f:
         f.writelines(web.readlines())
 else:
-    print('Reusing glcorearb.h from' + os.path.join(root_dir, 'include/GL') + '...')
+    print('Reusing glcorearb.h from ' + os.path.join(root_dir, 'include/GL') + '...')
 
 # Parse function names from glcorearb.h
 print('Parsing glcorearb.h header...')
