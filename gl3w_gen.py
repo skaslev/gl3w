@@ -129,9 +129,11 @@ extern "C" {
 #endif
 
 typedef void (*GL3WglProc)(void);
+typedef GL3WglProc (*GL3WGetProcAddressProc)(const char *proc);
 
 /* gl3w api */
 int gl3wInit(void);
+int gl3wInit2(GL3WGetProcAddressProc proc);
 int gl3wIsSupported(int major, int minor);
 GL3WglProc gl3wGetProcAddress(const char *proc);
 
@@ -259,13 +261,19 @@ static int parse_version(void)
 	return 0;
 }
 
-static void load_procs(void);
+static void load_procs(GL3WGetProcAddressProc proc);
 
 int gl3wInit(void)
 {
 	open_libgl();
-	load_procs();
+	load_procs(get_proc);
 	close_libgl();
+	return parse_version();
+}
+
+int gl3wInit2(GL3WGetProcAddressProc proc)
+{
+	load_procs(proc);
 	return parse_version();
 }
 
@@ -287,9 +295,9 @@ GL3WglProc gl3wGetProcAddress(const char *proc)
     for proc in procs:
         f.write('{0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode('utf-8'))
     f.write(br'''
-static void load_procs(void)
+static void load_procs(GL3WGetProcAddressProc proc)
 {
 ''')
     for proc in procs:
-        f.write('\t{0[p_s]} = ({0[p_t]})get_proc("{0[p]}");\n'.format(proc_t(proc)).encode('utf-8'))
+        f.write('\t{0[p_s]} = ({0[p_t]})proc("{0[p]}");\n'.format(proc_t(proc)).encode('utf-8'))
     f.write(b'}\n')
