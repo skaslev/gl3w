@@ -108,7 +108,7 @@ Travis Gesslein
 Arthur Tombs
     Port to Python 3
 
-Rommel160 [github.com/Rommel160]
+Daniel Cousens [https://github.com/dcousens]
     Code contributions
 
 Copyright
