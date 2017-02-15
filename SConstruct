@@ -24,7 +24,7 @@ else:
 env.Append(CFLAGS=['-Wall', '-pedantic', '-O2'])
 env.Append(CPPPATH='include')
 env.SharedLibrary('lib/gl3w', 'src/gl3w.c')
-o = env.Object('src/test', 'src/test.c')
-env.Program('bin/test_static', [o, 'src/gl3w.c'], LIBS=libs)
-env.Program('bin/test_shared', o, LIBS=libs + ['gl3w'],
+o = env.Object('src/glut_test', 'src/glut_test.c')
+env.Program('bin/glut_test_static', [o, 'src/gl3w.c'], LIBS=libs)
+env.Program('bin/glut_test_shared', o, LIBS=libs + ['gl3w'],
             LIBPATH='lib', RPATH=os.path.abspath('lib'))
