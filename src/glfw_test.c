@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	printf("OpenGL %s, GLSL %s\n", glGetString(GL_VERSION),
-		   glGetString(GL_SHADING_LANGUAGE_VERSION));
+	       glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	while (!glfwWindowShouldClose(window)) {
 		display(window);
