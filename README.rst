@@ -89,6 +89,8 @@ License
 -------
 
 gl3w_ is in the public domain. See the file UNLICENSE for more information.
+![](https://licensebuttons.net/p/mark/1.0/88x31.png)
+![](public-domain-mark.png)
 
 Credits
 -------
