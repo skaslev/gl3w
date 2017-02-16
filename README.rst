@@ -88,11 +88,9 @@ The gl3w_ API consists of just three functions:
 License
 -------
 
-gl3w_ is in the public domain. See the file UNLICENSE for more information.
-
-.. image:: https://licensebuttons.net/p/mark/1.0/88x31.png
-
 .. image:: public-domain-mark.png
+
+gl3w_ is in the public domain. See the file UNLICENSE for more information.
 
 Credits
 -------
