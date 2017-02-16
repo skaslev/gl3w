@@ -39,14 +39,14 @@ static float randf()
 	return (float) rand() / ((float) RAND_MAX + 1);
 }
 
-static void display(GLFWwindow * window)
+static void display(GLFWwindow *window)
 {
 	glClearColor(randf(), randf(), randf(), 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glfwSwapBuffers(window);
 }
 
-static void reshape(GLFWwindow * window, int w, int h)
+static void reshape(GLFWwindow *window, int w, int h)
 {
 	width = w > 1 ? w : 1;
 	height = h > 1 ? h : 1;
@@ -58,7 +58,7 @@ static void reshape(GLFWwindow * window, int w, int h)
 
 int main(int argc, char **argv)
 {
-	GLFWwindow * window;
+	GLFWwindow *window;
 
 	glfwInit();
 
