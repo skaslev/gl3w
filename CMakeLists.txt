@@ -56,7 +56,7 @@ target_include_directories(${PROJECT_NAME} INTERFACE
 )
 target_include_directories(${PROJECT_NAME} INTERFACE ${EXTERNAL_INCLUDE_DIRS})
 # let remote project know which libraries need to be linked
-target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTERNAL_LIBRARIES} dl)
+target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTERNAL_LIBRARIES} ${CMAKE_DL_LIBS})
 
 set(MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(BUILD_CMAKE_DIR "${CMAKE_CURRENT_BINARY_DIR}/cmake")
