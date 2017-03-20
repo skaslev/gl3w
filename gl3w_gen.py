@@ -86,8 +86,7 @@ if not os.path.exists(os.path.join(root_dir, 'src')):
 # Download glcorearb.h
 if not os.path.exists(os.path.join(root_dir, 'include/GL/glcorearb.h')):
     print('Downloading glcorearb.h to ' + os.path.join(root_dir, 'include/GL/glcorearb.h'))
-    context = ssl._create_unverified_context()
-    web = urllib2.urlopen('https://www.opengl.org/registry/api/GL/glcorearb.h', context=context)
+    web = urllib2.urlopen('http://www.opengl.org/registry/api/GL/glcorearb.h')
     with open(os.path.join(root_dir, 'include/GL/glcorearb.h'), 'wb') as f:
         f.writelines(web.readlines())
 else:
