@@ -30,7 +30,6 @@ from __future__ import print_function
 
 import re
 import os
-import ssl
 import sys
 
 # Try to import Python 3 library urllib.request
