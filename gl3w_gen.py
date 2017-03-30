@@ -249,14 +249,14 @@ static struct {
 static int parse_version(void)
 {
 	if (!glGetIntegerv)
-		return -1;
+		return 0;
 
 	glGetIntegerv(GL_MAJOR_VERSION, &version.major);
 	glGetIntegerv(GL_MINOR_VERSION, &version.minor);
 
 	if (version.major < 3)
-		return -1;
-	return 0;
+		return 0;
+	return 1;
 }
 
 static void load_procs(GL3WGetProcAddressProc proc);
