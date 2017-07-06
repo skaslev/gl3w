@@ -207,7 +207,6 @@ static void open_libgl(void)
 	bundleURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
 		CFSTR("/System/Library/Frameworks/OpenGL.framework"),
 		kCFURLPOSIXPathStyle, true);
-
 	bundle = CFBundleCreate(kCFAllocatorDefault, bundleURL);
 	assert(bundle != NULL);
 }
@@ -222,7 +221,8 @@ static GL3WglProc get_proc(const char *proc)
 {
 	GL3WglProc res;
 
-	CFStringRef procname = CFStringCreateWithCString(kCFAllocatorDefault, proc, kCFStringEncodingASCII);
+	CFStringRef procname = CFStringCreateWithCString(kCFAllocatorDefault,
+		proc, kCFStringEncodingASCII);
 	*(void **)(&res) = CFBundleGetFunctionPointerForName(bundle, procname);
 	CFRelease(procname);
 	return res;
