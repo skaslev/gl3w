@@ -118,7 +118,7 @@ with open(os.path.join(args.root, 'include/GL/glcorearb.h'), 'r') as f:
             continue
         proc = m.group(1)
         if args.ext or not is_ext(proc):
-            procs.append(m.group(1))
+            procs.append(proc)
 procs.sort()
 
 # Generate gl3w.h
