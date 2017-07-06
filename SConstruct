@@ -21,7 +21,7 @@ if platform.system() == 'Darwin':
 else:
     libs = ['glut', 'dl']
 
-env.Append(CFLAGS=['-Wall', '-pedantic', '-O2'])
+env.Append(CFLAGS=['-Wall', '-Wextra', '-pedantic', '-O2'])
 env.Append(CPPPATH='include')
 env.SharedLibrary('lib/gl3w', 'src/gl3w.c')
 o = env.Object('src/glut_test', 'src/glut_test.c')

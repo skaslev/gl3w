@@ -313,7 +313,7 @@ union GL3WProcs gl3wProcs;
 
 static void load_procs(GL3WGetProcAddressProc proc)
 {
-	int i;
+	size_t i;
 	for (i = 0; i < ARRAY_SIZE(proc_names); i++)
 		gl3wProcs.ptr[i] = proc(proc_names[i]);
 }
