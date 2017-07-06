@@ -72,7 +72,7 @@ UNLICENSE = br'''/*
 
 '''
 
-EXT_SUFFIX = ['ARB', 'EXT', 'OVR', 'NV', 'AMD', 'INTEL']
+EXT_SUFFIX = ['ARB', 'EXT', 'KHR', 'OVR', 'NV', 'AMD', 'INTEL']
 
 def is_ext(proc):
     return any(proc.endswith(suffix) for suffix in EXT_SUFFIX)
@@ -122,7 +122,7 @@ with open(os.path.join(args.root, 'include/GL/glcorearb.h'), 'r') as f:
 procs.sort()
 
 # Generate gl3w.h
-print('Generating gl3w.h in ' + os.path.join(args.root, 'include/GL') + '...')
+print('Generating gl3w.h in {0}...'.format(os.path.join(args.root, 'include/GL')))
 with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
     write(f, UNLICENSE)
     write(f, br'''#ifndef __gl3w_h_
@@ -172,7 +172,7 @@ extern union GL3WProcs gl3wProcs;
 ''')
 
 # Generate gl3w.c
-print('Generating gl3w.c in src...')
+print('Generating gl3w.c in {0}...'.format(os.path.join(args.root, 'src')))
 with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
     write(f, UNLICENSE)
     write(f, br'''#include <GL/gl3w.h>
