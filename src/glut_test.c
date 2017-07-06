@@ -63,11 +63,11 @@ static void reshape(int w, int h)
 
 int main(int argc, char **argv)
 {
-	glutInit(&argc, argv);
 	unsigned mode = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE;
 #ifdef __APPLE__
 	mode |= GLUT_3_2_CORE_PROFILE;
 #endif
+	glutInit(&argc, argv);
 	glutInitDisplayMode(mode);
 	glutInitWindowSize(width, height);
 	glutCreateWindow("cookie");
