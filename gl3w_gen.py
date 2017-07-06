@@ -105,15 +105,18 @@ procs.sort()
 def proc_t(proc):
     return {
         'p': proc,
-        'p_s': 'gl3w' + proc[2:],
+        'p_s': proc[2:],
         'p_t': 'PFN' + proc.upper() + 'PROC'
     }
+
+def write(f, b):
+    f.write(b.encode('utf-8'))
 
 # Generate gl3w.h
 print('Generating gl3w.h in ' + os.path.join(root_dir, 'include/GL') + '...')
 with open(os.path.join(root_dir, 'include/GL/gl3w.h'), 'wb') as f:
-    f.write(UNLICENSE)
-    f.write(br'''#ifndef __gl3w_h_
+    write(f, UNLICENSE)
+    write(f, br'''#ifndef __gl3w_h_
 #define __gl3w_h_
 
 #include <GL/glcorearb.h>
@@ -135,14 +138,23 @@ int gl3wInit2(GL3WGetProcAddressProc proc);
 int gl3wIsSupported(int major, int minor);
 GL3WglProc gl3wGetProcAddress(const char *proc);
 
+/* gl3w internal state */
+''')
+    write(f, b'union GL3WProcs {\n')
+    write(f, b'\tGL3WglProc ptr[{0}];\n'.format(len(procs)))
+    write(f, b'\tstruct {\n')
+    for proc in procs:
+        write(f, b'\t\t{0[p_t]: <55} {0[p_s]};\n'.format(proc_t(proc)))
+    write(f, br'''	} gl;
+};
+
+extern union GL3WProcs gl3wProcs;
+
 /* OpenGL functions */
 ''')
     for proc in procs:
-        f.write('extern {0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode('utf-8'))
-    f.write(b'\n')
-    for proc in procs:
-        f.write('#define {0[p]: <45} {0[p_s]}\n'.format(proc_t(proc)).encode('utf-8'))
-    f.write(br'''
+        write(f, b'#define {0[p]: <48} gl3wProcs.gl.{0[p_s]}\n'.format(proc_t(proc)))
+    write(f, br'''
 #ifdef __cplusplus
 }
 #endif
@@ -153,8 +165,11 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 # Generate gl3w.c
 print('Generating gl3w.c in src...')
 with open(os.path.join(root_dir, 'src/gl3w.c'), 'wb') as f:
-    f.write(UNLICENSE)
-    f.write(br'''#include <GL/gl3w.h>
+    write(f, UNLICENSE)
+    write(f, br'''#include <GL/gl3w.h>
+#include <stdlib.h>
+
+#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN 1
@@ -207,8 +222,7 @@ static GL3WglProc get_proc(const char *proc)
 {
 	GL3WglProc res;
 
-	CFStringRef procname = CFStringCreateWithCString(kCFAllocatorDefault, proc,
-		kCFStringEncodingASCII);
+	CFStringRef procname = CFStringCreateWithCString(kCFAllocatorDefault, proc, kCFStringEncodingASCII);
 	*(void **)(&res) = CFBundleGetFunctionPointerForName(bundle, procname);
 	CFRelease(procname);
 	return res;
@@ -264,8 +278,8 @@ static void load_procs(GL3WGetProcAddressProc proc);
 int gl3wInit(void)
 {
 	open_libgl();
+	atexit(close_libgl);
 	load_procs(get_proc);
-	close_libgl();
 	return parse_version();
 }
 
@@ -289,13 +303,18 @@ GL3WglProc gl3wGetProcAddress(const char *proc)
 	return get_proc(proc);
 }
 
+static const char *proc_names[] = {
 ''')
     for proc in procs:
-        f.write('{0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode('utf-8'))
-    f.write(br'''
+        write(f, b'\t"{0}",\n'.format(proc))
+    write(f, br'''};
+
+union GL3WProcs gl3wProcs;
+
 static void load_procs(GL3WGetProcAddressProc proc)
 {
+	int i;
+	for (i = 0; i < ARRAY_SIZE(proc_names); i++)
+		gl3wProcs.ptr[i] = proc(proc_names[i]);
+}
 ''')
-    for proc in procs:
-        f.write('\t{0[p_s]} = ({0[p_t]})proc("{0[p]}");\n'.format(proc_t(proc)).encode('utf-8'))
-    f.write(b'}\n')
