@@ -16,7 +16,7 @@ project.
 Requirements
 ------------
 
-gl3w_gen.py_ requires Python version 2.6 or newer, with SSL support.
+gl3w_gen.py_ requires Python version 2.7 or newer, with SSL support.
 It is also compatible with Python 3.x.
 
 Example

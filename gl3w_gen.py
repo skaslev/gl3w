@@ -28,9 +28,9 @@
 # Allow Python 2.6+ to use the print() function
 from __future__ import print_function
 
-import re
+import argparse
 import os
-import sys
+import re
 
 # Try to import Python 3 library urllib.request
 # and if it fails, fall back to Python 2 urllib2
@@ -72,35 +72,10 @@ UNLICENSE = br'''/*
 
 '''
 
-root_dir = ''
-if len(sys.argv) > 1:
-    root_dir = sys.argv[1]
+EXT_SUFFIX = ['ARB', 'EXT', 'OVR', 'NV', 'AMD', 'INTEL']
 
-# Create directories
-if not os.path.exists(os.path.join(root_dir, 'include/GL')):
-    os.makedirs(os.path.join(root_dir, 'include/GL'))
-if not os.path.exists(os.path.join(root_dir, 'src')):
-    os.makedirs(os.path.join(root_dir, 'src'))
-
-# Download glcorearb.h
-if not os.path.exists(os.path.join(root_dir, 'include/GL/glcorearb.h')):
-    print('Downloading glcorearb.h to ' + os.path.join(root_dir, 'include/GL/glcorearb.h'))
-    web = urllib2.urlopen('http://www.opengl.org/registry/api/GL/glcorearb.h')
-    with open(os.path.join(root_dir, 'include/GL/glcorearb.h'), 'wb') as f:
-        f.writelines(web.readlines())
-else:
-    print('Reusing glcorearb.h from ' + os.path.join(root_dir, 'include/GL') + '...')
-
-# Parse function names from glcorearb.h
-print('Parsing glcorearb.h header...')
-procs = []
-p = re.compile(r'GLAPI.*APIENTRY\s+(\w+)')
-with open(os.path.join(root_dir, 'include/GL/glcorearb.h'), 'r') as f:
-    for line in f:
-        m = p.match(line)
-        if m:
-            procs.append(m.group(1))
-procs.sort()
+def is_ext(proc):
+    return any(proc.endswith(suffix) for suffix in EXT_SUFFIX)
 
 def proc_t(proc):
     return {
@@ -112,9 +87,43 @@ def proc_t(proc):
 def write(f, b):
     f.write(b.encode('utf-8'))
 
+parser = argparse.ArgumentParser(description='gl3w generator script')
+parser.add_argument('--ext', action='store_true', help='Load extensions')
+parser.add_argument('--root', type=str, default='', help='Root directory')
+args = parser.parse_args()
+
+# Create directories
+if not os.path.exists(os.path.join(args.root, 'include/GL')):
+    os.makedirs(os.path.join(args.root, 'include/GL'))
+if not os.path.exists(os.path.join(args.root, 'src')):
+    os.makedirs(os.path.join(args.root, 'src'))
+
+# Download glcorearb.h
+if not os.path.exists(os.path.join(args.root, 'include/GL/glcorearb.h')):
+    print('Downloading glcorearb.h to ' + os.path.join(args.root, 'include/GL/glcorearb.h'))
+    web = urllib2.urlopen('http://www.opengl.org/registry/api/GL/glcorearb.h')
+    with open(os.path.join(args.root, 'include/GL/glcorearb.h'), 'wb') as f:
+        f.writelines(web.readlines())
+else:
+    print('Reusing glcorearb.h from ' + os.path.join(args.root, 'include/GL') + '...')
+
+# Parse function names from glcorearb.h
+print('Parsing glcorearb.h header...')
+procs = []
+p = re.compile(r'GLAPI.*APIENTRY\s+(\w+)')
+with open(os.path.join(args.root, 'include/GL/glcorearb.h'), 'r') as f:
+    for line in f:
+        m = p.match(line)
+        if not m:
+            continue
+        proc = m.group(1)
+        if args.ext or not is_ext(proc):
+            procs.append(m.group(1))
+procs.sort()
+
 # Generate gl3w.h
-print('Generating gl3w.h in ' + os.path.join(root_dir, 'include/GL') + '...')
-with open(os.path.join(root_dir, 'include/GL/gl3w.h'), 'wb') as f:
+print('Generating gl3w.h in ' + os.path.join(args.root, 'include/GL') + '...')
+with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
     write(f, UNLICENSE)
     write(f, br'''#ifndef __gl3w_h_
 #define __gl3w_h_
@@ -164,7 +173,7 @@ extern union GL3WProcs gl3wProcs;
 
 # Generate gl3w.c
 print('Generating gl3w.c in src...')
-with open(os.path.join(root_dir, 'src/gl3w.c'), 'wb') as f:
+with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
     write(f, UNLICENSE)
     write(f, br'''#include <GL/gl3w.h>
 #include <stdlib.h>
