@@ -208,8 +208,8 @@ static GL3WglProc get_proc(const char *proc)
 #elif defined(__APPLE__) || defined(__APPLE_CC__)
 #include <Carbon/Carbon.h>
 
-CFBundleRef bundle;
-CFURLRef bundleURL;
+static CFBundleRef bundle;
+static CFURLRef bundleURL;
 
 static void open_libgl(void)
 {
