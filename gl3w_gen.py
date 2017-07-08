@@ -40,7 +40,7 @@ except ImportError:
     import urllib2
 
 # UNLICENSE copyright header
-UNLICENSE = br'''/*
+UNLICENSE = r'''/*
 
     This file was generated with gl3w_gen.py, part of gl3w
     (hosted at https://github.com/skaslev/gl3w)
@@ -85,7 +85,7 @@ def proc_t(proc):
     }
 
 def write(f, b):
-    f.write(b.encode('utf-8'))
+    f.write(str(b).encode('utf-8'))
 
 parser = argparse.ArgumentParser(description='gl3w generator script')
 parser.add_argument('--ext', action='store_true', help='Load extensions')
@@ -125,7 +125,7 @@ procs.sort()
 print('Generating gl3w.h in {0}...'.format(os.path.join(args.root, 'include/GL')))
 with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
     write(f, UNLICENSE)
-    write(f, br'''#ifndef __gl3w_h_
+    write(f, r'''#ifndef __gl3w_h_
 #define __gl3w_h_
 
 #include <GL/glcorearb.h>
@@ -149,12 +149,12 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
 
 /* gl3w internal state */
 ''')
-    write(f, b'union GL3WProcs {\n')
-    write(f, b'\tGL3WglProc ptr[{0}];\n'.format(len(procs)))
-    write(f, b'\tstruct {\n')
+    write(f, 'union GL3WProcs {\n')
+    write(f, '\tGL3WglProc ptr[{0}];\n'.format(len(procs)))
+    write(f, '\tstruct {\n')
     for proc in procs:
-        write(f, b'\t\t{0[p_t]: <55} {0[p_s]};\n'.format(proc_t(proc)))
-    write(f, br'''	} gl;
+        write(f, '\t\t{0[p_t]: <55} {0[p_s]};\n'.format(proc_t(proc)))
+    write(f, r'''	} gl;
 };
 
 extern union GL3WProcs gl3wProcs;
@@ -162,8 +162,8 @@ extern union GL3WProcs gl3wProcs;
 /* OpenGL functions */
 ''')
     for proc in procs:
-        write(f, b'#define {0[p]: <48} gl3wProcs.gl.{0[p_s]}\n'.format(proc_t(proc)))
-    write(f, br'''
+        write(f, '#define {0[p]: <48} gl3wProcs.gl.{0[p_s]}\n'.format(proc_t(proc)))
+    write(f, r'''
 #ifdef __cplusplus
 }
 #endif
@@ -175,7 +175,7 @@ extern union GL3WProcs gl3wProcs;
 print('Generating gl3w.c in {0}...'.format(os.path.join(args.root, 'src')))
 with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
     write(f, UNLICENSE)
-    write(f, br'''#include <GL/gl3w.h>
+    write(f, r'''#include <GL/gl3w.h>
 #include <stdlib.h>
 
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
@@ -315,8 +315,8 @@ GL3WglProc gl3wGetProcAddress(const char *proc)
 static const char *proc_names[] = {
 ''')
     for proc in procs:
-        write(f, b'\t"{0}",\n'.format(proc))
-    write(f, br'''};
+        write(f, '\t"{0}",\n'.format(proc))
+    write(f, r'''};
 
 union GL3WProcs gl3wProcs;
 
