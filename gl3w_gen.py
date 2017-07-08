@@ -84,8 +84,8 @@ def proc_t(proc):
         'p_t': 'PFN' + proc.upper() + 'PROC'
     }
 
-def write(f, b):
-    f.write(b.encode('utf-8'))
+def write(f, s):
+    f.write(s.encode('utf-8'))
 
 parser = argparse.ArgumentParser(description='gl3w generator script')
 parser.add_argument('--ext', action='store_true', help='Load extensions')
