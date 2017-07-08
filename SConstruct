@@ -17,7 +17,7 @@ else:
 libs = []
 if platform.system() == 'Darwin':
     env.Append(CFLAGS=['-Wno-deprecated-declarations'],
-               FRAMEWORKS=['CoreFoundation', 'GLUT'])
+               FRAMEWORKS=['GLUT'])
 else:
     libs = ['glut', 'dl']
 
