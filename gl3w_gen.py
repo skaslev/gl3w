@@ -285,6 +285,8 @@ int gl3wInit(void)
 
 int gl3wInit2(GL3WGetProcAddressProc proc)
 {
+	open_libgl();
+	atexit(close_libgl);
 	load_procs(proc);
 	return parse_version();
 }
