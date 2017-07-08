@@ -180,7 +180,7 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
 
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 
-#ifdef _WIN32
+#if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 
@@ -205,7 +205,7 @@ static GL3WglProc get_proc(const char *proc)
 		res = (GL3WglProc)GetProcAddress(libgl, proc);
 	return res;
 }
-#elif defined(__APPLE__) || defined(__APPLE_CC__)
+#elif defined(__APPLE__)
 #include <dlfcn.h>
 
 static void *libgl;
