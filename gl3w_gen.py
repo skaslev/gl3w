@@ -81,7 +81,7 @@ def proc_t(proc):
     return {
         'p': proc,
         'p_s': proc[2:],
-        'p_t': 'PFN' + proc.upper() + 'PROC'
+        'p_t': 'PFN{0}PROC'.format(proc.upper())
     }
 
 def write(f, s):
@@ -100,12 +100,12 @@ if not os.path.exists(os.path.join(args.root, 'src')):
 
 # Download glcorearb.h
 if not os.path.exists(os.path.join(args.root, 'include/GL/glcorearb.h')):
-    print('Downloading glcorearb.h to ' + os.path.join(args.root, 'include/GL/glcorearb.h'))
+    print('Downloading glcorearb.h to {0}...'.format(os.path.join(args.root, 'include/GL/glcorearb.h')))
     web = urllib2.urlopen('http://www.opengl.org/registry/api/GL/glcorearb.h')
     with open(os.path.join(args.root, 'include/GL/glcorearb.h'), 'wb') as f:
         f.writelines(web.readlines())
 else:
-    print('Reusing glcorearb.h from ' + os.path.join(args.root, 'include/GL') + '...')
+    print('Reusing glcorearb.h from {0}...'.format(os.path.join(args.root, 'include/GL')))
 
 # Parse function names from glcorearb.h
 print('Parsing glcorearb.h header...')
