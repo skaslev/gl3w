@@ -134,6 +134,11 @@ with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
 #define __gl_h_
 #endif
 
+#define GL3W_OK 0
+#define GL3W_ERROR_INIT -1
+#define GL3W_ERROR_LIBRARY_OPEN -2
+#define GL3W_ERROR_OPENGL_VERSION -3
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -186,9 +191,13 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
 
 static HMODULE libgl;
 
-static void open_libgl(void)
+static int open_libgl(void)
 {
 	libgl = LoadLibraryA("opengl32.dll");
+	if (!libgl)
+		return GL3W_ERROR_LIBRARY_OPEN;
+
+	return GL3W_OK;
 }
 
 static void close_libgl(void)
@@ -210,9 +219,13 @@ static GL3WglProc get_proc(const char *proc)
 
 static void *libgl;
 
-static void open_libgl(void)
+static int open_libgl(void)
 {
 	libgl = dlopen("/System/Library/Frameworks/OpenGL.framework/OpenGL", RTLD_LAZY | RTLD_GLOBAL);
+	if (!libgl)
+		return GL3W_ERROR_LIBRARY_OPEN;
+
+	return GL3W_OK;
 }
 
 static void close_libgl(void)
@@ -224,7 +237,7 @@ static GL3WglProc get_proc(const char *proc)
 {
 	GL3WglProc res;
 
-        *(void **)(&res) = dlsym(libgl, proc);
+	*(void **)(&res) = dlsym(libgl, proc);
 	return res;
 }
 #else
@@ -234,10 +247,15 @@ static GL3WglProc get_proc(const char *proc)
 static void *libgl;
 static PFNGLXGETPROCADDRESSPROC glx_get_proc_address;
 
-static void open_libgl(void)
+static int open_libgl(void)
 {
 	libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_GLOBAL);
+	if (!libgl)
+		return GL3W_ERROR_LIBRARY_OPEN;
+
 	*(void **)(&glx_get_proc_address) = dlsym(libgl, "glXGetProcAddressARB");
+
+	return GL3W_OK;
 }
 
 static void close_libgl(void)
@@ -263,14 +281,14 @@ static struct {
 static int parse_version(void)
 {
 	if (!glGetIntegerv)
-		return -1;
+		return GL3W_ERROR_INIT;
 
 	glGetIntegerv(GL_MAJOR_VERSION, &version.major);
 	glGetIntegerv(GL_MINOR_VERSION, &version.minor);
 
 	if (version.major < 3)
-		return -1;
-	return 0;
+		return GL3W_ERROR_OPENGL_VERSION;
+	return GL3W_OK;
 }
 
 static void load_procs(GL3WGetProcAddressProc proc);
@@ -282,10 +300,14 @@ int gl3wInit(void)
 
 int gl3wInit2(GL3WGetProcAddressProc proc)
 {
-	open_libgl();
-	atexit(close_libgl);
-	load_procs(proc);
-	return parse_version();
+	int ret = open_libgl();
+	if (!ret) {
+		atexit(close_libgl);
+		load_procs(proc);
+		return parse_version();
+	}
+
+	return ret;
 }
 
 int gl3wIsSupported(int major, int minor)

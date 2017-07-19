@@ -71,7 +71,7 @@ The gl3w_ API consists of just three functions:
 
     Initializes the library. Should be called once after an OpenGL context has
     been created. Returns ``0`` when gl3w_ was initialized successfully,
-    ``-1`` if there was an error.
+    ``non-zero`` if there was an error.
 
 ``int gl3wIsSupported(int major, int minor)``
 
