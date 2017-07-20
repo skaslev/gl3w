@@ -134,14 +134,14 @@ with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
 #define __gl_h_
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GL3W_OK 0
 #define GL3W_ERROR_INIT -1
 #define GL3W_ERROR_LIBRARY_OPEN -2
 #define GL3W_ERROR_OPENGL_VERSION -3
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef void (*GL3WglProc)(void);
 typedef GL3WglProc (*GL3WGetProcAddressProc)(const char *proc);
@@ -254,7 +254,6 @@ static int open_libgl(void)
 		return GL3W_ERROR_LIBRARY_OPEN;
 
 	*(void **)(&glx_get_proc_address) = dlsym(libgl, "glXGetProcAddressARB");
-
 	return GL3W_OK;
 }
 
@@ -300,14 +299,13 @@ int gl3wInit(void)
 
 int gl3wInit2(GL3WGetProcAddressProc proc)
 {
-	int ret = open_libgl();
-	if (!ret) {
-		atexit(close_libgl);
-		load_procs(proc);
-		return parse_version();
-	}
+	int res = open_libgl();
+	if (res)
+		return res;
 
-	return ret;
+	atexit(close_libgl);
+	load_procs(proc);
+	return parse_version();
 }
 
 int gl3wIsSupported(int major, int minor)
