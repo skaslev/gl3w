@@ -249,7 +249,7 @@ static PFNGLXGETPROCADDRESSPROC glx_get_proc_address;
 
 static int open_libgl(void)
 {
-	libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_GLOBAL);
+	libgl = dlopen("libGL.so", RTLD_LAZY | RTLD_GLOBAL);
 	if (!libgl)
 		return GL3W_ERROR_LIBRARY_OPEN;
 
