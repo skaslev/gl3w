@@ -223,7 +223,7 @@ static void *libgl;
 
 static int open_libgl(void)
 {
-	libgl = dlopen("/System/Library/Frameworks/OpenGL.framework/OpenGL", RTLD_LAZY | RTLD_GLOBAL);
+	libgl = dlopen("/System/Library/Frameworks/OpenGL.framework/OpenGL", RTLD_LAZY | RTLD_LOCAL);
 	if (!libgl)
 		return GL3W_ERROR_LIBRARY_OPEN;
 
@@ -250,7 +250,7 @@ static GL3WglProc (*glx_get_proc_address)(const GLubyte *);
 
 static int open_libgl(void)
 {
-	libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_GLOBAL);
+	libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_LOCAL);
 	if (!libgl)
 		return GL3W_ERROR_LIBRARY_OPEN;
 
