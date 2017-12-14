@@ -245,9 +245,8 @@ static GL3WglProc get_proc(const char *proc)
 #else
 #include <dlfcn.h>
 
-typedef GL3WglProc (*PFNGLXGETPROCADDRESSPROC)(const GLubyte *);
 static void *libgl;
-static PFNGLXGETPROCADDRESSPROC glx_get_proc_address;
+static GL3WglProc (*glx_get_proc_address)(const GLubyte *);
 
 static int open_libgl(void)
 {
