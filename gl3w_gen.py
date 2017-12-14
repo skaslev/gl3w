@@ -183,7 +183,7 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
     write(f, r'''#include <GL/gl3w.h>
 #include <stdlib.h>
 
-#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
+#define ARRAY_SIZE(x)  (sizeof(x) / sizeof((x)[0]))
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN 1
@@ -244,8 +244,8 @@ static GL3WglProc get_proc(const char *proc)
 }
 #else
 #include <dlfcn.h>
-#include <GL/glx.h>
 
+typedef GL3WglProc (*PFNGLXGETPROCADDRESSPROC)(const GLubyte *);
 static void *libgl;
 static PFNGLXGETPROCADDRESSPROC glx_get_proc_address;
 
