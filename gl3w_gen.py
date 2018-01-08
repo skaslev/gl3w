@@ -131,6 +131,10 @@ with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
 
 #include <GL/glcorearb.h>
 
+#ifndef GL3W_API
+    #define GL3W_API
+#endif
+
 #ifndef __gl_h_
 #define __gl_h_
 #endif
@@ -148,10 +152,10 @@ typedef void (*GL3WglProc)(void);
 typedef GL3WglProc (*GL3WGetProcAddressProc)(const char *proc);
 
 /* gl3w api */
-int gl3wInit(void);
-int gl3wInit2(GL3WGetProcAddressProc proc);
-int gl3wIsSupported(int major, int minor);
-GL3WglProc gl3wGetProcAddress(const char *proc);
+GL3W_API int gl3wInit(void);
+GL3W_API int gl3wInit2(GL3WGetProcAddressProc proc);
+GL3W_API int gl3wIsSupported(int major, int minor);
+GL3W_API GL3WglProc gl3wGetProcAddress(const char *proc);
 
 /* gl3w internal state */
 ''')
@@ -163,7 +167,7 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
     write(f, r'''	} gl;
 };
 
-extern union GL3WProcs gl3wProcs;
+GL3W_API extern union GL3WProcs gl3wProcs;
 
 /* OpenGL functions */
 ''')
@@ -335,7 +339,7 @@ static const char *proc_names[] = {
         write(f, '\t"{0}",\n'.format(proc))
     write(f, r'''};
 
-union GL3WProcs gl3wProcs;
+GL3W_API union GL3WProcs gl3wProcs;
 
 static void load_procs(GL3WGetProcAddressProc proc)
 {
