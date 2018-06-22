@@ -92,12 +92,11 @@ def touch_dir(path):
         os.makedirs(path)
 
 def download(url, dst):
-    dir, file = os.path.split(dst)
     if os.path.exists(dst):
-        print('Reusing {0} in {1}...'.format(file, dir))
+        print('Reusing {0}...'.format(dst))
         return
 
-    print('Downloading {0} in {1}...'.format(file, dir))
+    print('Downloading {0}...'.format(dst))
     web = urllib2.urlopen(url)
     with open(dst, 'wb') as f:
         f.writelines(web.readlines())
@@ -133,7 +132,7 @@ with open(os.path.join(args.root, 'include/GL/glcorearb.h'), 'r') as f:
 procs.sort()
 
 # Generate gl3w.h
-print('Generating gl3w.h in {0}...'.format(os.path.join(args.root, 'include/GL')))
+print('Generating {0}...'.format(os.path.join(args.root, 'include/GL/gl3w.h')))
 with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
     write(f, UNLICENSE)
     write(f, r'''#ifndef __gl3w_h_
@@ -188,7 +187,7 @@ extern union GL3WProcs gl3wProcs;
 ''')
 
 # Generate gl3w.c
-print('Generating gl3w.c in {0}...'.format(os.path.join(args.root, 'src')))
+print('Generating {0}...'.format(os.path.join(args.root, 'src/gl3w.c')))
 with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
     write(f, UNLICENSE)
     write(f, r'''#include <GL/gl3w.h>
