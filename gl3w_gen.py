@@ -87,36 +87,36 @@ def proc_t(proc):
 def write(f, s):
     f.write(s.encode('utf-8'))
 
+def touch_dir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def download(url, dst):
+    dir, file = os.path.split(dst)
+    if os.path.exists(dst):
+        print('Reusing {0} in {1}...'.format(file, dir))
+        return
+
+    print('Downloading {0} in {1}...'.format(file, dir))
+    web = urllib2.urlopen(url)
+    with open(dst, 'wb') as f:
+        f.writelines(web.readlines())
+
 parser = argparse.ArgumentParser(description='gl3w generator script')
 parser.add_argument('--ext', action='store_true', help='Load extensions')
 parser.add_argument('--root', type=str, default='', help='Root directory')
 args = parser.parse_args()
 
 # Create directories
-if not os.path.exists(os.path.join(args.root, 'include/GL')):
-    os.makedirs(os.path.join(args.root, 'include/GL'))
-if not os.path.exists(os.path.join(args.root, 'include/KHR')):
-    os.makedirs(os.path.join(args.root, 'include/KHR'))
-if not os.path.exists(os.path.join(args.root, 'src')):
-    os.makedirs(os.path.join(args.root, 'src'))
+touch_dir(os.path.join(args.root, 'include/GL'))
+touch_dir(os.path.join(args.root, 'include/KHR'))
+touch_dir(os.path.join(args.root, 'src'))
 
-# Download glcorearb.h
-if not os.path.exists(os.path.join(args.root, 'include/GL/glcorearb.h')):
-    print('Downloading glcorearb.h to {0}...'.format(os.path.join(args.root, 'include/GL/glcorearb.h')))
-    web = urllib2.urlopen('https://www.khronos.org/registry/OpenGL/api/GL/glcorearb.h')
-    with open(os.path.join(args.root, 'include/GL/glcorearb.h'), 'wb') as f:
-        f.writelines(web.readlines())
-else:
-    print('Reusing glcorearb.h from {0}...'.format(os.path.join(args.root, 'include/GL')))
-
-# Download khrplatform.h
-if not os.path.exists(os.path.join(args.root, 'include/KHR/khrplatform.h')):
-    print('Downloading khrplatform.h to {0}...'.format(os.path.join(args.root, 'include/KHR/khrplatform.h')))
-    web = urllib2.urlopen('https://www.khronos.org/registry/EGL/api/KHR/khrplatform.h')
-    with open(os.path.join(args.root, 'include/KHR/khrplatform.h'), 'wb') as f:
-        f.writelines(web.readlines())
-else:
-    print('Reusing khrplatform.h from {0}...'.format(os.path.join(args.root, 'include/KHR')))
+# Download glcorearb.h and khrplatform.h
+download('https://www.khronos.org/registry/OpenGL/api/GL/glcorearb.h',
+         os.path.join(args.root, 'include/GL/glcorearb.h'))
+download('https://www.khronos.org/registry/EGL/api/KHR/khrplatform.h',
+         os.path.join(args.root, 'include/KHR/khrplatform.h'))
 
 # Parse function names from glcorearb.h
 print('Parsing glcorearb.h header...')
