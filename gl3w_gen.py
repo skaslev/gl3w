@@ -77,13 +77,6 @@ EXT_SUFFIX = ['ARB', 'EXT', 'KHR', 'OVR', 'NV', 'AMD', 'INTEL']
 def is_ext(proc):
     return any(proc.endswith(suffix) for suffix in EXT_SUFFIX)
 
-def proc_t(proc):
-    return {
-        'p': proc,
-        'p_s': proc[2:],
-        'p_t': 'PFN{0}PROC'.format(proc.upper())
-    }
-
 def write(f, s):
     f.write(s.encode('utf-8'))
 
@@ -168,7 +161,7 @@ GL3WglProc gl3wGetProcAddress(const char *proc);
     write(f, '\tGL3WglProc ptr[{0}];\n'.format(len(procs)))
     write(f, '\tstruct {\n')
     for proc in procs:
-        write(f, '\t\t{0[p_t]: <55} {0[p_s]};\n'.format(proc_t(proc)))
+        write(f, '\t\t{0: <55} {1};\n'.format('PFN{0}PROC'.format(proc.upper()), proc[2:]))
     write(f, r'''	} gl;
 };
 
@@ -177,7 +170,7 @@ extern union GL3WProcs gl3wProcs;
 /* OpenGL functions */
 ''')
     for proc in procs:
-        write(f, '#define {0[p]: <48} gl3wProcs.gl.{0[p_s]}\n'.format(proc_t(proc)))
+        write(f, '#define {0: <48} gl3wProcs.gl.{1}\n'.format(proc, proc[2:]))
     write(f, r'''
 #ifdef __cplusplus
 }
