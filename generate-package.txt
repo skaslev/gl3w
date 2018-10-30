@@ -1,0 +1,10 @@
+# Define GL3W_SOURCE_DIR in parent CMake script, then include this one to
+# generate gl3w files during configuration stage and then use
+# find_package(gl3w REQUIRED) to include generated gl3w files in project
+
+execute_process(
+    COMMAND cmake .
+    WORKING_DIRECTORY ${GL3W_SOURCE_DIR})
+execute_process(
+    COMMAND cmake --build .
+    WORKING_DIRECTORY ${GL3W_SOURCE_DIR})
