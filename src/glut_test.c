@@ -30,11 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/gl3w.h>
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
+#include <GL/freeglut.h>
 
 static int width = 600, height = 600;
 
@@ -64,10 +60,10 @@ static void reshape(int w, int h)
 int main(int argc, char **argv)
 {
 	unsigned mode = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE;
-#ifdef __APPLE__
-	mode |= GLUT_3_2_CORE_PROFILE;
-#endif
+
 	glutInit(&argc, argv);
+	glutInitContextVersion(3, 2);
+	glutInitContextProfile(GLUT_CORE_PROFILE);
 	glutInitDisplayMode(mode);
 	glutInitWindowSize(width, height);
 	glutCreateWindow("cookie");
