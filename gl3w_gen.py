@@ -187,7 +187,9 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
 #define ARRAY_SIZE(x)  (sizeof(x) / sizeof((x)[0]))
 
 #if defined(_WIN32)
-#define WIN32_LEAN_AND_MEAN 1
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN 1 // Exclude advanced Windows headers
+#endif // WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 static HMODULE libgl;
