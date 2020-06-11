@@ -11,7 +11,7 @@ if env.GetOption('clean'):
     except:
         pass
 else:
-    print 'Generating gl3w...'
+    print('Generating gl3w...')
     os.system('./gl3w_gen.py')
 
 libs = []
