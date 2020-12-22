@@ -193,7 +193,8 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
 #include <windows.h>
 
 static HMODULE libgl;
-static PROC (__stdcall *wgl_get_proc_address)(LPCSTR);
+typedef PROC(__stdcall* GL3WglGetProcAddr)(LPCSTR);
+static GL3WglGetProcAddr wgl_get_proc_address;
 
 static int open_libgl(void)
 {
