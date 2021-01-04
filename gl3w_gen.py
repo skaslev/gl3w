@@ -193,7 +193,8 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
 #include <windows.h>
 
 static HMODULE libgl;
-static PROC (__stdcall *wgl_get_proc_address)(LPCSTR);
+typedef PROC(__stdcall* GL3WglGetProcAddr)(LPCSTR);
+static GL3WglGetProcAddr wgl_get_proc_address;
 
 static int open_libgl(void)
 {
@@ -201,7 +202,7 @@ static int open_libgl(void)
 	if (!libgl)
 		return GL3W_ERROR_LIBRARY_OPEN;
 
-	*(void **)(&wgl_get_proc_address) = GetProcAddress(libgl, "wglGetProcAddress");
+	wgl_get_proc_address = (GL3WglGetProcAddr)GetProcAddress(libgl, "wglGetProcAddress");
 	return GL3W_OK;
 }
 
