@@ -95,6 +95,7 @@ def download(url, dst):
 parser = argparse.ArgumentParser(description='gl3w generator script')
 parser.add_argument('--ext', action='store_true', help='Load extensions')
 parser.add_argument('--root', type=str, default='', help='Root directory')
+parser.add_argument('--stb', action='store_true', help='Generate single-file lib (in stb fashion)')
 args = parser.parse_args()
 
 # Create directories
@@ -129,8 +130,14 @@ with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
     write(f, r'''#ifndef __gl3w_h_
 #define __gl3w_h_
 
-#include <GL/glcorearb.h>
+''')
+    if args.stb:
+        write(f, '#include "glcorearb.h"')
+    else:
+        write(f, '#include <GL/glcorearb.h>')
 
+    write(f, r'''
+	
 #ifndef __gl_h_
 #define __gl_h_
 #endif
@@ -178,10 +185,26 @@ extern union GL3WProcs gl3wProcs;
 ''')
 
 # Generate gl3w.c
-print('Generating {0}...'.format(os.path.join(args.root, 'src/gl3w.c')))
-with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
-    write(f, UNLICENSE)
-    write(f, r'''#include <GL/gl3w.h>
+sourcefile = os.path.join(args.root, 'src/gl3w.c')
+mode = 'wb'
+if args.stb:
+    # Clean old gl3w.c if existing
+    if os.path.exists(sourcefile):
+        os.remove(sourcefile)
+
+    sourcefile = os.path.join(args.root, 'include/GL/gl3w.h')
+    mode = 'ab'
+else:
+    print('Generating {0}...'.format(sourcefile))
+	
+with open(sourcefile, mode) as f:
+    if args.stb:
+        write(f, '\n#ifdef GL3W_IMPLEMENTATION')
+    else:
+        write(f, UNLICENSE)
+        write(f, '#include <GL/gl3w.h>')
+
+    write(f, r'''
 #include <stdlib.h>
 
 #define ARRAY_SIZE(x)  (sizeof(x) / sizeof((x)[0]))
@@ -345,3 +368,6 @@ static void load_procs(GL3WGetProcAddressProc proc)
 		gl3wProcs.ptr[i] = proc(proc_names[i]);
 }
 ''')
+
+    if args.stb:
+        write(f, '#endif')
