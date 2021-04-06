@@ -85,6 +85,15 @@ The gl3w_ API consists of just three functions:
     profile on initialization. It allows you to load OpenGL extensions outside
     of the core profile.
 
+Options
+-------
+
+The generator script optionally takes the arguments:
+
+``--ext`` to include the GL Extensions in output header.
+
+``--root=outputdir`` to set the location for the output to something else than current working directory.
+
 License
 -------
 
