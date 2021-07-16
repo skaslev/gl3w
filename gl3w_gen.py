@@ -192,8 +192,8 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
 
 #if defined(_WIN32)
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN 1 // Exclude advanced Windows headers
-#endif // WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN 1
+#endif
 #include <windows.h>
 
 static HMODULE libgl;
