@@ -132,7 +132,7 @@ with open(os.path.join(args.root, 'include/GL/gl3w.h'), 'wb') as f:
 #include <GL/glcorearb.h>
 
 #ifndef GL3W_API
-    #define GL3W_API
+#define GL3W_API
 #endif
 
 #ifndef __gl_h_
