@@ -253,9 +253,9 @@ static GL3WglProc get_proc(const char *proc)
 #else
 #include <dlfcn.h>
 
-static void *libgl;  // OpenGL library
-static void *libglx;  // GLX library
-static void *libegl;  // EGL library
+static void *libgl;  /* OpenGL library */
+static void *libglx;  /* GLX library */
+static void *libegl;  /* EGL library */
 static GL3WGetProcAddressProc gl_get_proc_address;
 
 static void close_libgl(void)
@@ -282,15 +282,11 @@ static int is_library_loaded(const char *name, void **lib)
 
 static int open_libs(void)
 {
-	// On Linux we have two APIs to get process addresses: EGL and GLX.
-	// EGL is supported under both X11 and Wayland, whereas GLX is X11-specific.
-
-	libgl = NULL;
-	libegl = NULL;
-	libglx = NULL;
-
-	// First check what's already loaded, the windowing library might have
-	// already loaded either EGL or GLX and we want to use the same one.
+	/* On Linux we have two APIs to get process addresses: EGL and GLX.
+	 * EGL is supported under both X11 and Wayland, whereas GLX is X11-specific.
+	 * First check what's already loaded, the windowing library might have
+	 * already loaded either EGL or GLX and we want to use the same one.
+	 */
 
 	if (is_library_loaded("libEGL.so.1", &libegl) ||
 			is_library_loaded("libGLX.so.0", &libglx)) {
@@ -304,20 +300,19 @@ static int open_libs(void)
 	if (is_library_loaded("libGL.so.1", &libgl))
 		return GL3W_OK;
 
-	// Neither is already loaded, so we have to load one.  Try EGL first
-	// because it is supported under both X11 and Wayland.
+	/* Neither is already loaded, so we have to load one. Try EGL first
+	 * because it is supported under both X11 and Wayland.
+	 */
 
-	// Load OpenGL + EGL
+	/* Load OpenGL + EGL */
 	libgl = dlopen("libOpenGL.so.0", RTLD_LAZY | RTLD_LOCAL);
 	libegl = dlopen("libEGL.so.1", RTLD_LAZY | RTLD_LOCAL);
 	if (libgl && libegl)
 		return GL3W_OK;
-	else
-		close_libgl();
 
-	// Fall back to legacy libGL, which includes GLX
+	/* Fall back to legacy libGL, which includes GLX */
+	close_libgl();
 	libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_LOCAL);
-	
 	if (libgl)
 		return GL3W_OK;
 
@@ -349,9 +344,10 @@ static GL3WglProc get_proc(const char *proc)
 {
 	GL3WglProc res = NULL;
 
-	// Before EGL version 1.5, eglGetProcAddress doesn't support querying core
-	// functions and may return a dummy function if we try, so try to load the
-	// function from the GL library directly first.
+	/* Before EGL version 1.5, eglGetProcAddress doesn't support querying core
+	 * functions and may return a dummy function if we try, so try to load the
+	 * function from the GL library directly first.
+	 */
 	if (libegl)
 		*(void **)(&res) = dlsym(libgl, proc);
 
