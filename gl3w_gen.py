@@ -88,7 +88,7 @@ def download(url, dst):
         return
 
     print('Downloading {0}...'.format(dst))
-    web = urllib2.urlopen(url)
+    web = urllib2.urlopen(urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'}))
     with open(dst, 'wb') as f:
         f.writelines(web.readlines())
 
