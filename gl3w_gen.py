@@ -103,9 +103,9 @@ touch_dir(os.path.join(args.root, 'include/KHR'))
 touch_dir(os.path.join(args.root, 'src'))
 
 # Download glcorearb.h and khrplatform.h
-download('https://www.khronos.org/registry/OpenGL/api/GL/glcorearb.h',
+download('https://registry.khronos.org/OpenGL/api/GL/glcorearb.h',
          os.path.join(args.root, 'include/GL/glcorearb.h'))
-download('https://www.khronos.org/registry/EGL/api/KHR/khrplatform.h',
+download('https://registry.khronos.org/EGL/api/KHR/khrplatform.h',
          os.path.join(args.root, 'include/KHR/khrplatform.h'))
 
 # Parse function names from glcorearb.h
