@@ -29,10 +29,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <GL/gl3w.h>
 #include <GL/freeglut.h>
 
+#define UNUSED(x) ((void) (x))
+
 static int width = 600, height = 600;
+static float r, g, b;
 
 static float randf()
 {
@@ -41,7 +45,7 @@ static float randf()
 
 static void display(void)
 {
-	glClearColor(randf(), randf(), randf(), 1.0f);
+	glClearColor(r, g, b, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -57,9 +61,20 @@ static void reshape(int w, int h)
 	glEnable(GL_DEPTH_TEST);
 }
 
+static void keyboard(unsigned char key, int x, int y)
+{
+	UNUSED(key), UNUSED(x), UNUSED(y);
+	exit(0);
+}
+
 int main(int argc, char **argv)
 {
 	unsigned mode = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE;
+
+	srand(time(NULL));
+	r = randf();
+	g = randf();
+	b = randf();
 
 	glutInit(&argc, argv);
 	glutInitContextVersion(3, 2);
@@ -70,6 +85,7 @@ int main(int argc, char **argv)
 
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display);
+	glutKeyboardFunc(keyboard);
 
 	if (gl3wInit()) {
 		fprintf(stderr, "failed to initialize OpenGL\n");

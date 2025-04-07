@@ -28,3 +28,4 @@ o = env.Object('src/glut_test', 'src/glut_test.c')
 env.Program('bin/glut_test_static', [o, 'src/gl3w.c'], LIBS=libs)
 env.Program('bin/glut_test_shared', o, LIBS=libs + ['gl3w'],
             LIBPATH='lib', RPATH=os.path.abspath('lib'))
+env.Program('bin/glfw_test_static', ['src/glfw_test.c', 'src/gl3w.c'], LIBS=['dl', 'glfw'])

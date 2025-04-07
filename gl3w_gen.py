@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   This file is part of gl3w, hosted at https://github.com/skaslev/gl3w
 #

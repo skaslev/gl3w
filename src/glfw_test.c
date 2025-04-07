@@ -29,10 +29,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <GL/gl3w.h>
 #include <GLFW/glfw3.h>
 
+#define UNUSED(x) ((void) (x))
+
 static int width = 600, height = 600;
+static float r, g, b;
 
 static float randf()
 {
@@ -41,13 +45,14 @@ static float randf()
 
 static void display(GLFWwindow *window)
 {
-	glClearColor(randf(), randf(), randf(), 1.0f);
+	glClearColor(r, g, b, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glfwSwapBuffers(window);
 }
 
 static void reshape(GLFWwindow *window, int w, int h)
 {
+	UNUSED(window);
 	width = w > 1 ? w : 1;
 	height = h > 1 ? h : 1;
 	glViewport(0, 0, width, height);
@@ -56,9 +61,21 @@ static void reshape(GLFWwindow *window, int w, int h)
 	glEnable(GL_DEPTH_TEST);
 }
 
+static void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	UNUSED(window), UNUSED(key), UNUSED(scancode), UNUSED(action), UNUSED(mods);
+	exit(0);
+}
+
 int main(int argc, char **argv)
 {
 	GLFWwindow *window;
+
+	UNUSED(argc), UNUSED(argv);
+	srand(time(NULL));
+	r = randf();
+	g = randf();
+	b = randf();
 
 	glfwInit();
 
@@ -70,6 +87,7 @@ int main(int argc, char **argv)
 
 	glfwSetFramebufferSizeCallback(window, reshape);
 	glfwSetWindowRefreshCallback(window, display);
+	glfwSetKeyCallback(window, keyboard);
 
 	glfwMakeContextCurrent(window);
 
