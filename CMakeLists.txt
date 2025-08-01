@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
 project(gl3w)
 
@@ -37,7 +37,7 @@ else()
 endif()
 
 message(CHECK_START "Generating gl3w sources")
-execute_process(COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/gl3w_gen.py
+execute_process(COMMAND ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/gl3w_gen.py"
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} RESULT_VARIABLE success)
 message(CHECK_PASS "Done")
 
