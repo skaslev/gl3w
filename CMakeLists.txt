@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.1.3 FATAL_ERROR)
 
 project(gl3w)
 
+cmake_policy(SET CMP0072 NEW)
+cmake_policy(SET CMP0148 NEW)
+
 set(CMAKE_VERBOSE_MAKEFILE false)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON) # -fPIC
 
@@ -22,42 +25,24 @@ set(SOURCE_FILES
 find_package(OpenGL REQUIRED)
 
 # find python interpreter
-find_package(PythonInterp REQUIRED)
+find_package(Python COMPONENTS Interpreter REQUIRED)
 
 if(CMAKE_VERSION VERSION_LESS 3.8.0)
 	set(EXTERNAL_INCLUDE_DIRS ${EXTERNAL_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
 	set(EXTERNAL_LIBRARIES ${EXTERNAL_LIBRARIES} ${OPENGL_LIBRARIES})
 else()
 	# Since CMake 3.8 the IMPORTED targets available
-	set(EXTERNAL_LIBRARIES ${EXTERNAL_LIBRARIES} OpenGL::GL OpenGL::GLU)
+	set(EXTERNAL_LIBRARIES ${EXTERNAL_LIBRARIES} ${OPENGL_LIBRARIES}
+	)
 endif()
-# add command to create the header and source files
-add_custom_command(
-	OUTPUT
-		"${SOURCE_DIR}/gl3w.c"
-		"${HEADER_DIR}/GL/gl3w.h"
-		"${HEADER_DIR}/GL/glcorearb.h"
-		"${HEADER_DIR}/KHR/khrplatform.h"
-	COMMAND "${PYTHON_EXECUTABLE}" ${CMAKE_CURRENT_SOURCE_DIR}/gl3w_gen.py
-	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gl3w_gen.py
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
 
-# add pseudo target that depends on the generated files
-add_custom_target(
-	gl3w_gen ALL
-	DEPENDS
-		"${SOURCE_DIR}/gl3w.c"
-		"${HEADER_DIR}/GL/gl3w.h"
-		"${HEADER_DIR}/GL/glcorearb.h"
-		"${HEADER_DIR}/KHR/khrplatform.h"
-)
+message(CHECK_START "Generating gl3w sources")
+execute_process(COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/gl3w_gen.py
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} RESULT_VARIABLE success)
+message(CHECK_PASS "Done")
 
 # create gl3w target
 add_library(${PROJECT_NAME} INTERFACE)
-
-# make gl3w target depend on the generator target
-add_dependencies(${PROJECT_NAME} gl3w_gen)
 
 include(GNUInstallDirs)
 
