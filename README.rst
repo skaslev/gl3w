@@ -62,6 +62,21 @@ included before any other OpenGL related headers::
             return 0;
     }
 
+If your Project is using CMake you can import gl3w_ using ``FetchContent``::
+
+    include(FetchContent)
+    FetchContent_Declare(
+        gl3w
+        GIT_REPOSITORY https://github.com/Sebastian-Dawid/gl3w.git
+        GIT_TAG        master
+        GIT_SHALLOW    TRUE
+        GIT_PROGRESS   TRUE
+        EXCLUDE_FROM_ALL
+    )
+    FetchContent_MakeAvailable(gl3w)
+    # Declare your target that needs gl3w here
+    target_link_libraries(<target> PRIVATE gl3w)
+
 API Reference
 -------------
 
