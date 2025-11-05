@@ -196,6 +196,11 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
 #endif
 #include <windows.h>
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignore "-Wcast-function-type"
+#endif
+
 static HMODULE libgl;
 typedef PROC(__stdcall* GL3WglGetProcAddr)(LPCSTR);
 static GL3WglGetProcAddr wgl_get_proc_address;
@@ -224,6 +229,10 @@ static GL3WglProc get_proc(const char *proc)
 		res = (GL3WglProc)GetProcAddress(libgl, proc);
 	return res;
 }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 #elif defined(__APPLE__)
 #include <dlfcn.h>
 
