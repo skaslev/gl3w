@@ -198,7 +198,7 @@ with open(os.path.join(args.root, 'src/gl3w.c'), 'wb') as f:
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignore "-Wcast-function-type"
+#pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
 
 static HMODULE libgl;
