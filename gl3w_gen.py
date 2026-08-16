@@ -222,9 +222,10 @@ static void close_libgl(void)
 
 static GL3WglProc get_proc(const char *proc)
 {
-	GL3WglProc res;
+	GL3WglProc res = NULL;
 
-	res = (GL3WglProc)wgl_get_proc_address(proc);
+	if (wgl_get_proc_address)
+		res = (GL3WglProc)wgl_get_proc_address(proc);
 	if (!res)
 		res = (GL3WglProc)GetProcAddress(libgl, proc);
 	return res;
